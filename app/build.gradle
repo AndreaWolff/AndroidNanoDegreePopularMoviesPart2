@@ -1,0 +1,76 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.andrea.popularmoviespart2"
+        minSdkVersion 21
+        targetSdkVersion 26
+        buildConfigField("String", "API_KEY", API_KEY)
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        // Taken from https://developer.android.com/training/testing/unit-testing/local-unit-tests.html
+        unitTests.returnDefaultValues = true
+    }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+
+    // Butterknife taken from http://jakewharton.github.io/butterknife/
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Dagger taken from https://github.com/google/dagger
+    implementation 'com.google.dagger:dagger:2.9'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.9'
+
+    // Retrofit and OkHttp taken from http://square.github.io/retrofit/
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    // Gson
+    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // RxJava2 taken from https://github.com/ReactiveX/RxJava
+    compile 'io.reactivex.rxjava2:rxjava:2.1.9'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
+    // Glide taken from https://github.com/codepath/android_guides/wiki/Displaying-Images-with-the-Glide-Library
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+
+    // Stetho taken from https://guides.codepath.com/android/Debugging-with-Stetho
+    compile 'com.facebook.stetho:stetho:1.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
+    // Testing
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // Mockito taken from http://site.mockito.org/
+    testCompile 'org.mockito:mockito-core:2.8.47'
+    androidTestCompile 'org.mockito:mockito-android:2.8.47'
+}

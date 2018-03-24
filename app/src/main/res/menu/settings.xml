@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/menu_popular_movies"
+        android:title="@string/setting_menu_popular_movies_title"
+        app:showAsAction="collapseActionView"
+        />
+
+    <item
+        android:id="@+id/menu_top_rated_movies"
+        android:title="@string/setting_menu_top_rated_movies_title"
+        app:showAsAction="collapseActionView"
+        />
+
+</menu>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Popular Movies - Part 2</string>
+
+    <!-- Main Activity -->
+    <string name="main_popular_movies_title">Popular Movies</string>
+    <string name="main_top_rated_movies_title">Top-Rated Movies</string>
+
+    <!-- Details Activity -->
+    <string name="details_movie_title">Movie Details</string>
+    <string name="details_release_date_label">Release Date:</string>
+    <string name="details_plot_synopsis_label">Plot Synopsis:</string>
+    <string name="details_watch_trailer_button">Watch Trailer</string>
+
+    <!-- Settings Menu -->
+    <string name="setting_menu_popular_movies_title">Popular Movies</string>
+    <string name="setting_menu_top_rated_movies_title">Top-Rated Movies</string>
+
+    <!-- Common -->
+    <string name="movie_poster_image_description">Movie Poster</string>
+    <string name="movie_backdrop_image_description">Backdrop Photo</string>
+    <string name="play_trailer_button_description">Play trailer image</string>
+
+    <!-- Errors -->
+    <string name="error_title_unauthorized">Unauthorized Access</string>
+    <string name="error_message_unauthorized">You are not authorized for this site. Please check you API key and try again.</string>
+    <string name="error_title_timeout">Timeout</string>
+    <string name="error_message_timeout">Unable to connect, please try again later.</string>
+    <string name="error_title">Error</string>
+    <string name="error_message">Something went wrong, please try again later.</string>
+
+</resources>
