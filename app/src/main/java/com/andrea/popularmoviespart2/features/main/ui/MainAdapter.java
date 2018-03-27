@@ -1,6 +1,5 @@
 package com.andrea.popularmoviespart2.features.main.ui;
 
-
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

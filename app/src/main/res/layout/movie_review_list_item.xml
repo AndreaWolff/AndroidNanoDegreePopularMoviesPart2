@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <View
+        android:layout_marginTop="@dimen/standard_padding_quarter"
+        android:layout_marginBottom="@dimen/standard_padding_quarter"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/colorPrimaryDark"/>
+
+    <TextView
+        android:id="@+id/textview_movie_review_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic|bold"
+        tools:text="Author"
+        />
+
+    <TextView
+        android:id="@+id/textview_movie_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/standard_padding_half"
+        android:textStyle="italic"
+        tools:text="Content"
+        />
+
+</LinearLayout>

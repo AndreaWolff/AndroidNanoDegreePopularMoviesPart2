@@ -1,6 +1,5 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
-
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.google.gson.annotations.SerializedName;
 

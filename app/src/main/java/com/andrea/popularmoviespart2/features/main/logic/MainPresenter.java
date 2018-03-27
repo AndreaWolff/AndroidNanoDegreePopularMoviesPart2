@@ -126,7 +126,6 @@ public class MainPresenter {
     }
 
     private void handleResponseError(Throwable error) {
-
         if (view != null) {
             view.hideProgressBarOnMovieListError();
 

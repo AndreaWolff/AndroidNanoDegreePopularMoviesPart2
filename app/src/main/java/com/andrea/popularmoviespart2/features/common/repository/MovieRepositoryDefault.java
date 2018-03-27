@@ -1,9 +1,11 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
-
 import android.support.annotation.NonNull;
 
+import com.andrea.popularmoviespart2.features.common.ActivityConstants;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
+import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
+import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
 
 import java.util.List;
 
@@ -43,5 +45,13 @@ public class MovieRepositoryDefault implements MovieRepository {
             cachedTopRatedMovies = moviesDto.toMovies();
             return cachedTopRatedMovies;
         });
+    }
+
+    @NonNull @Override public Single<List<MovieTrailer>> getMovieTrailers(@NonNull String id) {
+        return movieDao.getMovieTrailers(id).map(MovieTrailersDto::toTrailers);
+    }
+
+    @NonNull @Override public Single<List<MovieReview>> getMovieReviews(@NonNull String id) {
+        return movieDao.getMovieReviews(id).map(MovieReviewsDto::toReviews);
     }
 }

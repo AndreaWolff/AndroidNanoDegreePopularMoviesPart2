@@ -9,6 +9,7 @@ public class Movie implements Parcelable {
 
     private static final String BASE_MOVIE_POSTER_URL = "http://image.tmdb.org/t/p/w185";
 
+    private final String id;
     private final String title;
     private final String releaseDate;
     private final float voteAverage;
@@ -16,12 +17,14 @@ public class Movie implements Parcelable {
     private final String posterPath;
     private final String backdropPhotoPath;
 
-    public Movie(@NonNull String title,
+    public Movie(@NonNull String id,
+                 @NonNull String title,
                  @NonNull String releaseDate,
                  float voteAverage,
                  @NonNull String plotSynopsis,
                  @NonNull String posterPath,
                  @NonNull String backdropPhotoPath) {
+        this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
@@ -29,6 +32,8 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
         this.backdropPhotoPath = backdropPhotoPath;
     }
+
+    @NonNull public String getId() { return id; }
 
     @NonNull public String getTitle() {
         return title;
@@ -54,6 +59,7 @@ public class Movie implements Parcelable {
 
     // Parcelable code generated from http://www.parcelabler.com/
     private Movie(Parcel in) {
+        id = in.readString();
         title = in.readString();
         releaseDate = in.readString();
         voteAverage = in.readFloat();
@@ -69,6 +75,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(releaseDate);
         dest.writeFloat(voteAverage);

@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 class MovieDto {
 
+    @SerializedName("id") private String id;
     @SerializedName("title") private String title;
     @SerializedName("release_date") private String releaseDate;
     @SerializedName("vote_average") private float voteAverage;
@@ -13,7 +14,8 @@ class MovieDto {
     @SerializedName("backdrop_path") private String backdropPhotoPath;
 
     Movie toMovie() {
-        return new Movie(title,
+        return new Movie(id,
+                title,
                 releaseDate,
                 voteAverage,
                 plotSynopsis,

@@ -18,5 +18,8 @@
     <dimen name="backdrop_image_height">300dp</dimen>
 
     <dimen name="middle_guideline">180dp</dimen>
+    <dimen name="lower_guideline">408dp</dimen>
+
+    <dimen name="divider_height">1dp</dimen>
 
 </resources>

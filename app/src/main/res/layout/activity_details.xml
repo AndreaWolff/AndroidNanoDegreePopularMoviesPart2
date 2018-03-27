@@ -4,177 +4,248 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             >
 
-            <ImageView
-                android:id="@+id/detailsBackdropImageView"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="@dimen/backdrop_image_height"
-                android:contentDescription="@string/movie_backdrop_image_description"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_background"
-                />
-
-            <ImageView
-                android:id="@+id/detailsPosterImageView"
-                android:layout_width="@dimen/poster_image_width"
-                android:layout_height="@dimen/poster_image_height"
-                android:layout_marginBottom="@dimen/standard_padding_half"
-                android:layout_marginTop="@dimen/poster_image_top_height"
-                android:contentDescription="@string/movie_poster_image_description"
-                android:scaleType="fitCenter"
-                app:layout_constraintBottom_toTopOf="@+id/lowerGuideline"
-                app:layout_constraintStart_toStartOf="@+id/startGuideline"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ic_launcher"
-                />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/startGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/standard_padding"
-                />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/middleGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/middle_guideline"
-                />
-
-            <TextView
-                android:id="@+id/detailsMovieTitleTextView"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_padding_half"
-                android:maxLines="2"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-                app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/detailsBackdropImageView"
-                tools:text="The Hunt for the Red October"
-                />
-
-            <TextView
-                android:id="@+id/detailsReleaseDateLabel"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_padding_half"
-                android:text="@string/details_release_date_label"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-                app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/detailsMovieTitleTextView"
-                />
-
-            <TextView
-                android:id="@+id/detailsReleaseDateTextView"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_padding_quarter"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-                app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/detailsReleaseDateLabel"
-                tools:text="March 3 1990"
-                />
-
-            <TextView
-                android:id="@+id/detailsPlotSynopsisLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/details_plot_synopsis_label"
-                app:layout_constraintStart_toStartOf="@+id/startGuideline"
-                app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
-                />
-
-            <RatingBar
-                android:id="@+id/detailsMovieRatingBar"
-                style="@style/RatingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:numStars="5"
-                android:progressTint="#FDD835"
-                android:rating="2.5"
-                android:secondaryProgressTint="#FBC02D"
-                android:stepSize=".1"
-                app:layout_constraintStart_toStartOf="@+id/middleGuideline"
-                app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
-                />
-
-            <TextView
-                android:id="@+id/detailsMovieRatingTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/standard_padding_half"
-                app:layout_constraintBottom_toTopOf="@+id/detailsPlotSynopsisTextView"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/detailsMovieRatingBar"
-                app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
-                tools:text="50%"
-                />
-
-            <TextView
-                android:id="@+id/detailsPlotSynopsisTextView"
-                android:layout_width="@dimen/match_constraint"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/standard_padding_quarter"
-                android:paddingBottom="@dimen/standard_padding"
-                app:layout_constraintEnd_toStartOf="@+id/endGuideline"
-                app:layout_constraintStart_toStartOf="@+id/startGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/detailsPlotSynopsisLabel"
-                tools:text="This is a movie about a sub."
-                />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/endGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/standard_padding"
-                />
-
-            <android.support.constraint.Guideline
-                android:id="@+id/lowerGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="408dp"
-                />
-
             <android.support.constraint.ConstraintLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/standard_padding_half"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/detailsBackdropImageView"
-                app:layout_constraintEnd_toStartOf="@id/endGuideline"
-                app:layout_constraintStart_toEndOf="@id/middleGuideline"
                 >
 
-                <include
-                    layout="@layout/details_play_trailer_button"
+                <ImageView
+                    android:id="@+id/detailsBackdropImageView"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="@dimen/backdrop_image_height"
+                    android:contentDescription="@string/movie_backdrop_image_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_launcher_background"
                     />
+
+                <ImageView
+                    android:id="@+id/detailsPosterImageView"
+                    android:layout_width="@dimen/poster_image_width"
+                    android:layout_height="@dimen/poster_image_height"
+                    android:layout_marginBottom="@dimen/standard_padding_quarter_half"
+                    android:layout_marginTop="@dimen/poster_image_top_height"
+                    android:contentDescription="@string/movie_poster_image_description"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toTopOf="@+id/lowerGuideline"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/startGuideline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
+                    app:srcCompat="@mipmap/ic_launcher"
+                    />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/startGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/standard_padding"
+                    />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/middleGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/middle_guideline"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsMovieTitleTextView"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_padding_half"
+                    android:maxLines="2"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsBackdropImageView"
+                    tools:text="The Hunt for the Red October"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsReleaseDateLabel"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_padding_half"
+                    android:text="@string/details_release_date_label"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsMovieTitleTextView"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsReleaseDateTextView"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_padding_quarter"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsReleaseDateLabel"
+                    tools:text="March 3 1990"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsPlotSynopsisLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/details_plot_synopsis_label"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimaryDark"
+                    app:layout_constraintStart_toStartOf="@+id/startGuideline"
+                    app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
+                    />
+
+                <RatingBar
+                    android:id="@+id/detailsMovieRatingBar"
+                    style="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:numStars="5"
+                    android:progressTint="#FDD835"
+                    android:rating="2.5"
+                    android:secondaryProgressTint="#FBC02D"
+                    android:stepSize=".1"
+                    app:layout_constraintStart_toStartOf="@+id/middleGuideline"
+                    app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsMovieRatingTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/standard_padding_half"
+                    app:layout_constraintBottom_toTopOf="@+id/detailsPlotSynopsisTextView"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/detailsMovieRatingBar"
+                    app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
+                    tools:text="50%"
+                    />
+
+                <TextView
+                    android:id="@+id/detailsPlotSynopsisTextView"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_padding_quarter"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintStart_toStartOf="@+id/startGuideline"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsPlotSynopsisLabel"
+                    tools:text="This is a movie about a sub."
+                    />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/endGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/standard_padding"
+                    />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/lowerGuideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="@dimen/lower_guideline"
+                    />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/standard_padding_half"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/detailsBackdropImageView"
+                    app:layout_constraintEnd_toStartOf="@id/endGuideline"
+                    app:layout_constraintStart_toEndOf="@id/middleGuideline"
+                    >
+
+                    <include
+                        layout="@layout/details_play_trailer_button"
+                        />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/innerLayout"
+                    android:layout_width="@dimen/match_constraint"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_padding_half"
+                    app:layout_constraintEnd_toStartOf="@id/endGuideline"
+                    app:layout_constraintStart_toEndOf="@id/startGuideline"
+                    app:layout_constraintTop_toBottomOf="@id/detailsPlotSynopsisTextView"
+                    >
+
+                    <ProgressBar
+                        android:id="@+id/loadingProgressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/innerLayout"
+                        app:layout_constraintEnd_toEndOf="@id/innerLayout"
+                        app:layout_constraintStart_toStartOf="@id/innerLayout"
+                        app:layout_constraintTop_toTopOf="@id/innerLayout"
+                        tools:visibility="visible"
+                        />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="@dimen/match_constraint"
+                        android:layout_height="@dimen/divider_height"
+                        android:background="@color/colorPrimaryDark"
+                        app:layout_constraintBottom_toTopOf="@+id/detailsUserReviewLabel"
+                        app:layout_constraintEnd_toEndOf="@id/innerLayout"
+                        app:layout_constraintStart_toStartOf="@id/innerLayout"
+                        app:layout_constraintTop_toTopOf="@+id/innerLayout"
+                        />
+
+                    <TextView
+                        android:id="@+id/detailsUserReviewLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/standard_padding_quarter"
+                        android:textSize="14sp"
+                        android:textColor="@color/colorPrimaryDark"
+                        app:layout_constraintStart_toStartOf="@id/innerLayout"
+                        app:layout_constraintTop_toBottomOf="@id/divider"
+                        tools:text="User Review:"
+                        />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/detailsMovieReviewsRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/standard_padding_quarter"
+                        android:paddingBottom="@dimen/standard_padding"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/detailsUserReviewLabel"
+                        />
+
+                </android.support.constraint.ConstraintLayout>
 
             </android.support.constraint.ConstraintLayout>
 
-        </android.support.constraint.ConstraintLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-    </ScrollView>
+    </FrameLayout>
 
 </layout>
