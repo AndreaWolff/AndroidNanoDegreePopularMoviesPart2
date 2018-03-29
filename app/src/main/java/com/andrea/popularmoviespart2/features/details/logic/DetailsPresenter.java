@@ -12,6 +12,7 @@ import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepository;
 import com.andrea.popularmoviespart2.features.details.DetailsContract;
+import com.andrea.popularmoviespart2.util.DrawableUtil;
 
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +34,9 @@ public class DetailsPresenter {
 
     private DetailsContract.View view;
     private Movie movie;
+    private MovieTrailer movieTrailer;
+    private List<MovieReview> movieReviews;
+    private boolean isFavorite;
 
     @Inject
     DetailsPresenter(@NonNull Context context,
@@ -97,39 +101,87 @@ public class DetailsPresenter {
             view.showProgressBar();
         }
 
-        disposable.add(movieRepository.getMovieReviews(movie.getId())
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(this::handleMovieReviewsResponseSuccessful, this::handleResponseError));
+        if (movieReviews == null) {
+            loadMovieReviews();
+        } else {
+            configureMovieReviews(movieReviews);
+        }
+
+        if (movieTrailer == null) {
+            loadMovieTrailers();
+        }
+
+        favoriteSelected();
     }
 
-    private void handleMovieReviewsResponseSuccessful(List<MovieReview> movieReviews) {
-        if (view != null) {
-            view.hideProgressBar();
+    private void loadMovieReviews() {
+        disposable.add(movieRepository.getMovieReviews(movie.getId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleMovieReviewsResponseSuccessful, this::handleResponseError));
+    }
 
-            if (movieReviews.isEmpty()) {
-                view.renderReviewLabel(R.string.details_no_reviews_label);
+    public void favoriteSelected() {
+        if (view != null) {
+            if (!isFavorite) {
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
+                isFavorite = true;
                 return;
             }
 
-            view.renderReviewLabel(context.getString(R.string.details_review_label));
-            view.showMovieReviews(movieReviews);
+            view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.red));
+            isFavorite = false;
+        }
+    }
+
+    public void shareYouTubeTrailer() {
+        if (view != null) {
+            view.shareYouTubeTrailer("text/plain", "http://www.youtube.com/watch?v=" + movieTrailer.getKey());
         }
     }
 
     public void watchTrailerSelected() {
+        if (movieTrailer == null) {
+            return;
+        }
+
+        configureMovieTrailer();
+    }
+
+    private void loadMovieTrailers() {
         disposable.add(movieRepository.getMovieTrailers(movie.getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleMovieTrailersResponseSuccessful, this::handleResponseError));
     }
 
-    private void handleMovieTrailersResponseSuccessful(List<MovieTrailer> movieTrailers) {
+    private void handleMovieReviewsResponseSuccessful(List<MovieReview> movieReviews) {
+        this.movieReviews = movieReviews;
+        configureMovieReviews(movieReviews);
+    }
+
+    private void configureMovieReviews(List<MovieReview> movieReviews) {
         if (view != null) {
-            MovieTrailer movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+            view.hideProgressBar();
 
-            // Taken from https://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
-            Intent appIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerAppUrl());
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerWebUrl());
+            if (movieReviews.isEmpty()) {
+                view.renderReviewLabel(context.getString(R.string.details_no_reviews_label));
+                return;
+            }
 
+            view.renderReviewLabel(context.getString(R.string.details_reviews_label));
+            view.showMovieReviews(movieReviews);
+        }
+    }
+
+    private void handleMovieTrailersResponseSuccessful(List<MovieTrailer> movieTrailers) {
+        movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+    }
+
+    private void configureMovieTrailer() {
+        // Taken from https://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerAppUrl());
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerWebUrl());
+
+        if (view != null) {
             view.getMovieTrailerIntent(appIntent, webIntent);
         }
     }

@@ -1,6 +1,7 @@
 package com.andrea.popularmoviespart2.features.details;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 
 import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
@@ -36,5 +37,9 @@ public interface DetailsContract {
         void showMovieReviews(@NonNull List<MovieReview> movieReviews);
 
         void renderReviewLabel(@NonNull String label);
+
+        void setFavoriteButton(@NonNull Drawable drawable);
+
+        void shareYouTubeTrailer(@NonNull String type, @NonNull String youTubeTrailer);
     }
 }

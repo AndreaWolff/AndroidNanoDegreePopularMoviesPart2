@@ -2,11 +2,14 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        >
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -28,6 +31,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_launcher_background"
+                    />
+
+                <ImageView
+                    android:id="@+id/detailsFavoriteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:contentDescription="@string/favorite_image_button"
+                    android:focusable="true"
+                    android:padding="@dimen/standard_padding"
+                    app:layout_constraintEnd_toStartOf="@+id/endGuideline"
+                    app:layout_constraintTop_toTopOf="parent"
                     />
 
                 <ImageView
@@ -68,9 +83,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/standard_padding_half"
                     android:maxLines="2"
+                    android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintEnd_toStartOf="@+id/endGuideline"
                     app:layout_constraintStart_toStartOf="@+id/middleGuideline"
                     app:layout_constraintTop_toBottomOf="@+id/detailsBackdropImageView"
@@ -83,8 +98,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/standard_padding_half"
                     android:text="@string/details_release_date_label"
-                    android:textSize="14sp"
                     android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/endGuideline"
                     app:layout_constraintStart_toStartOf="@+id/middleGuideline"
                     app:layout_constraintTop_toBottomOf="@+id/detailsMovieTitleTextView"
@@ -106,8 +121,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/details_plot_synopsis_label"
-                    android:textSize="14sp"
                     android:textColor="@color/colorPrimaryDark"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="@+id/startGuideline"
                     app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
                     />
@@ -222,8 +237,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/standard_padding_quarter"
-                        android:textSize="14sp"
                         android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/innerLayout"
                         app:layout_constraintTop_toBottomOf="@id/divider"
                         tools:text="User Review:"

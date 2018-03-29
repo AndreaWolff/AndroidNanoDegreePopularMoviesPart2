@@ -3,11 +3,14 @@ package com.andrea.popularmoviespart2.features.details.ui;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.andrea.popularmoviespart2.R;
@@ -36,6 +39,11 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     @OnClick(R.id.details_play_trailer_button)
     public void onWatchTrailerSelected() {
         presenter.watchTrailerSelected();
+    }
+
+    @OnClick(R.id.detailsFavoriteButton)
+    public void onFavoriteButtonSelected() {
+        presenter.favoriteSelected();
     }
 
     @Inject
@@ -73,10 +81,28 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_share);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_share:
+                presenter.shareYouTubeTrailer();
+                return true;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -115,7 +141,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @Override
-    public void renderBackdropPhoto(@NonNull String backdropPhotoPath) {GlideUtil.displayImage(backdropPhotoPath, binding.detailsBackdropImageView); }
+    public void renderBackdropPhoto(@NonNull String backdropPhotoPath) {
+        GlideUtil.displayImage(backdropPhotoPath, binding.detailsBackdropImageView);
+    }
 
     @Override
     public void finishActivity() {
@@ -168,6 +196,22 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     @Override
     public void renderReviewLabel(@NonNull String label) {
         binding.detailsUserReviewLabel.setText(label);
+    }
+
+    @Override
+    public void setFavoriteButton(@NonNull Drawable drawable) {
+        binding.detailsFavoriteButton.setImageDrawable(drawable);
+    }
+
+    @Override
+    public void shareYouTubeTrailer(@NonNull String type, @NonNull String youTubeTrailer) {
+        Intent shareIntent = ShareCompat.IntentBuilder
+                .from(this)
+                .setType(type)
+                .setText(youTubeTrailer)
+                .getIntent()
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        startActivity(shareIntent);
     }
     // endregion
 }

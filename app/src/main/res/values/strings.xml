@@ -16,11 +16,13 @@
     <!-- Settings Menu -->
     <string name="setting_menu_popular_movies_title">Popular Movies</string>
     <string name="setting_menu_top_rated_movies_title">Top-Rated Movies</string>
+    <string name="share_menu">Share</string>
 
     <!-- Common -->
     <string name="movie_poster_image_description">Movie Poster</string>
     <string name="movie_backdrop_image_description">Backdrop Photo</string>
     <string name="play_trailer_button_description">Play trailer image</string>
+    <string name="favorite_image_button">favorite image button</string>
 
     <!-- Errors -->
     <string name="error_title_unauthorized">Unauthorized Access</string>
