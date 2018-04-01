@@ -45,15 +45,6 @@ public class MovieTrailer implements Parcelable {
         return type;
     }
 
-    public Uri getYouTubeVideoUrl() {
-        return new Uri.Builder()
-                .scheme("http")
-                .authority("www.youtube.com")
-                .appendPath("watch")
-                .appendQueryParameter("videoID", getId())
-                .build();
-    }
-
     public Uri getYouTubeTrailerAppUrl() {
         return Uri.parse("vnd.youtube:" + key);
     }

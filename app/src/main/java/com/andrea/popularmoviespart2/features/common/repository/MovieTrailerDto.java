@@ -1,5 +1,7 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
+import android.support.annotation.Nullable;
+
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
 import com.google.gson.annotations.SerializedName;
 
@@ -11,7 +13,7 @@ class MovieTrailerDto {
     @SerializedName("site") private String site;
     @SerializedName("type") private String type;
 
-    MovieTrailer toMovieTrailer() {
+    @Nullable MovieTrailer toMovieTrailer() {
         return new MovieTrailer(id,
                                 key,
                                 name,

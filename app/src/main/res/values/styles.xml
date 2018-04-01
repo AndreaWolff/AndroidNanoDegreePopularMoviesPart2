@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -7,9 +6,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="RatingBar" parent="android:style/Widget.Material.RatingBar.Small">
-        <item name="colorControlNormal">#FBC02D</item>
-        <item name="colorControlActivated">#FDD835</item>
+    <style name="RatingBar">
+        <item name="colorControlActivated">@color/golden</item>
+        <item name="colorControlNormal">@color/secondary_text</item>
     </style>
 
 </resources>

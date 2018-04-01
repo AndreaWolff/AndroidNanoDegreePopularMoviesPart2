@@ -1,5 +1,7 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
+import android.support.annotation.NonNull;
+
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +12,7 @@ class MovieTrailersDto {
 
     @SerializedName("results") private List<MovieTrailerDto> movieTrailer;
 
-    List<MovieTrailer> toTrailers() {
+    @NonNull List<MovieTrailer> toTrailers() {
         List<MovieTrailer>  result = new ArrayList<>();
 
         for (MovieTrailerDto dto : movieTrailer) {

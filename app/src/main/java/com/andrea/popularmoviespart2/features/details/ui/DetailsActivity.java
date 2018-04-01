@@ -10,6 +10,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -48,6 +49,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
     @Inject
     DetailsPresenter presenter;
+
+    private boolean shareVisibility = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.action_share);
+        menu.findItem(R.id.action_share).setVisible(shareVisibility);
         return true;
     }
 
@@ -195,7 +198,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
     @Override
     public void renderReviewLabel(@NonNull String label) {
-        binding.detailsUserReviewLabel.setText(label);
+        binding.detailsUserReviewLabel.setText(Html.fromHtml(label));
     }
 
     @Override
@@ -212,6 +215,25 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
                 .getIntent()
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         startActivity(shareIntent);
+    }
+
+    @Override
+    public void hideMovieTrailerButtons() {
+        binding.movieTrailerContent.setVisibility(GONE);
+        shareVisibility = false;
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void hideContentProgressBar() {
+        binding.contentLoadingProgressBar.setVisibility(GONE);
+        binding.contentConstraintLayout.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void showContentProgressBar() {
+        binding.contentLoadingProgressBar.setVisibility(VISIBLE);
+        binding.contentConstraintLayout.setVisibility(GONE);
     }
     // endregion
 }

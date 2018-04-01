@@ -26,6 +26,10 @@
                 android:value=".features.main.ui.MainActivity"
                 />
         </activity>
+        <provider
+            android:authorities="com.andrea.popularmoviespart2"
+            android:name=".data.MovieProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

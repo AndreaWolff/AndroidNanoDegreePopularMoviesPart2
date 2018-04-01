@@ -12,7 +12,7 @@
         android:layout_marginBottom="@dimen/standard_padding_quarter"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:background="@color/colorPrimaryDark"/>
+        android:background="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/textview_movie_review_author"

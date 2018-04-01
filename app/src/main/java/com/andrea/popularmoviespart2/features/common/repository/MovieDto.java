@@ -20,6 +20,7 @@ class MovieDto {
                 voteAverage,
                 plotSynopsis,
                 posterPath,
-                backdropPhotoPath);
+                backdropPhotoPath,
+                false);
     }
 }

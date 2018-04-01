@@ -1,5 +1,6 @@
 package com.andrea.popularmoviespart2.features.details.logic;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,15 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PHOTO_PATH;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_ID;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_PLOT_SYNOPSIS;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_TITLE;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.CONTENT_URI;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.ERROR_MESSAGE_LOGGER;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.MOVIE;
 
@@ -36,7 +46,8 @@ public class DetailsPresenter {
     private Movie movie;
     private MovieTrailer movieTrailer;
     private List<MovieReview> movieReviews;
-    private boolean isFavorite;
+
+    private boolean requestInProgress;
 
     @Inject
     DetailsPresenter(@NonNull Context context,
@@ -62,6 +73,12 @@ public class DetailsPresenter {
     private void init() {
         if (view != null) {
             view.renderScreenTitle(context.getString(R.string.details_movie_title));
+
+            if (movie.isFavorite()) {
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
+            } else {
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
+            }
         }
 
         populateDetails(movie.getTitle(),
@@ -110,8 +127,6 @@ public class DetailsPresenter {
         if (movieTrailer == null) {
             loadMovieTrailers();
         }
-
-        favoriteSelected();
     }
 
     private void loadMovieReviews() {
@@ -121,16 +136,28 @@ public class DetailsPresenter {
     }
 
     public void favoriteSelected() {
-        if (view != null) {
-            if (!isFavorite) {
-                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
-                isFavorite = true;
-                return;
-            }
+        if (!movie.isFavorite()) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_MOVIE_ID, movie.getId());
+            contentValues.put(COLUMN_MOVIE_TITLE, movie.getTitle());
+            contentValues.put(COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
+            contentValues.put(COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
+            contentValues.put(COLUMN_MOVIE_PLOT_SYNOPSIS, movie.getPlotSynopsis());
+            contentValues.put(COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
+            contentValues.put(COLUMN_MOVIE_BACKDROP_PHOTO_PATH, movie.getBackdropPhotoPath());
+            contentValues.put(COLUMN_MOVIE_FAVORITE, 1);
 
-            view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.red));
-            isFavorite = false;
+            context.getContentResolver().insert(CONTENT_URI, contentValues);
+
+//            if (uri != null) {
+//                Toast.makeText(context, uri.toString(), Toast.LENGTH_LONG).show();
+//            }
+
+            view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
+            return;
         }
+
+        view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
     }
 
     public void shareYouTubeTrailer() {
@@ -148,6 +175,13 @@ public class DetailsPresenter {
     }
 
     private void loadMovieTrailers() {
+        if (requestInProgress) {
+            return;
+        }
+
+        requestInProgress = true;
+        view.showContentProgressBar();
+
         disposable.add(movieRepository.getMovieTrailers(movie.getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleMovieTrailersResponseSuccessful, this::handleResponseError));
@@ -173,6 +207,16 @@ public class DetailsPresenter {
     }
 
     private void handleMovieTrailersResponseSuccessful(List<MovieTrailer> movieTrailers) {
+        requestInProgress = false;
+
+        if (view != null) {
+            view.hideContentProgressBar();
+
+            if (movieTrailers.isEmpty()) {
+                view.hideMovieTrailerButtons();
+                return;
+            }
+        }
         movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
     }
 
@@ -187,7 +231,10 @@ public class DetailsPresenter {
     }
 
     private void handleResponseError(Throwable error) {
+        requestInProgress = false;
+
         if (view != null) {
+            view.hideContentProgressBar();
             view.hideProgressBar();
             configureErrorMessage(error);
         }

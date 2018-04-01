@@ -1,6 +1,5 @@
 package com.andrea.popularmoviespart2.features.common.domain;
 
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -16,6 +15,7 @@ public class Movie implements Parcelable {
     private final String plotSynopsis;
     private final String posterPath;
     private final String backdropPhotoPath;
+    private final boolean isFavorite;
 
     public Movie(@NonNull String id,
                  @NonNull String title,
@@ -23,7 +23,8 @@ public class Movie implements Parcelable {
                  float voteAverage,
                  @NonNull String plotSynopsis,
                  @NonNull String posterPath,
-                 @NonNull String backdropPhotoPath) {
+                 @NonNull String backdropPhotoPath,
+                 boolean isFavorite) {
         this.id = id;
         this.title = title;
         this.releaseDate = releaseDate;
@@ -31,6 +32,7 @@ public class Movie implements Parcelable {
         this.plotSynopsis = plotSynopsis;
         this.posterPath = posterPath;
         this.backdropPhotoPath = backdropPhotoPath;
+        this.isFavorite = isFavorite;
     }
 
     @NonNull public String getId() { return id; }
@@ -52,10 +54,18 @@ public class Movie implements Parcelable {
     }
 
     @NonNull public String getPosterPath() {
-        return BASE_MOVIE_POSTER_URL + posterPath;
+        return isFavorite ? posterPath : BASE_MOVIE_POSTER_URL + posterPath;
+
     }
 
-    @NonNull public String getBackdropPhotoPath() { return BASE_MOVIE_POSTER_URL + backdropPhotoPath; }
+    @NonNull public String getBackdropPhotoPath() {
+        return isFavorite ? backdropPhotoPath : BASE_MOVIE_POSTER_URL + backdropPhotoPath;
+
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
 
     // Parcelable code generated from http://www.parcelabler.com/
     private Movie(Parcel in) {
@@ -66,6 +76,7 @@ public class Movie implements Parcelable {
         plotSynopsis = in.readString();
         posterPath = in.readString();
         backdropPhotoPath = in.readString();
+        isFavorite = in.readByte() != 0x00;
     }
 
     @Override
@@ -82,6 +93,7 @@ public class Movie implements Parcelable {
         dest.writeString(plotSynopsis);
         dest.writeString(posterPath);
         dest.writeString(backdropPhotoPath);
+        dest.writeByte((byte) (isFavorite ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

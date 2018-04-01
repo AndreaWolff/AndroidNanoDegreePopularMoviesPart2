@@ -16,4 +16,10 @@
         app:showAsAction="collapseActionView"
         />
 
+    <item
+        android:id="@+id/menu_favorite_movies"
+        android:title="@string/setting_menu_favorite_movies_title"
+        app:showAsAction="collapseActionView"
+        />
+
 </menu>

@@ -8,6 +8,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:descendantFocusability="blocksDescendants"
         >
 
@@ -17,8 +18,11 @@
             >
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/contentConstraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible"
                 >
 
                 <ImageView
@@ -100,6 +104,7 @@
                     android:text="@string/details_release_date_label"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/endGuideline"
                     app:layout_constraintStart_toStartOf="@+id/middleGuideline"
                     app:layout_constraintTop_toBottomOf="@+id/detailsMovieTitleTextView"
@@ -123,21 +128,21 @@
                     android:text="@string/details_plot_synopsis_label"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/startGuideline"
                     app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
                     />
 
                 <RatingBar
                     android:id="@+id/detailsMovieRatingBar"
-                    style="@style/RatingBar"
+                    style="?attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:numStars="5"
-                    android:progressTint="#FDD835"
-                    android:rating="2.5"
-                    android:secondaryProgressTint="#FBC02D"
+                    android:rating="3"
                     android:stepSize=".1"
+                    android:theme="@style/RatingBar"
                     app:layout_constraintStart_toStartOf="@+id/middleGuideline"
                     app:layout_constraintTop_toTopOf="@+id/lowerGuideline"
                     />
@@ -183,6 +188,7 @@
                     />
 
                 <android.support.constraint.ConstraintLayout
+                    android:id="@+id/movieTrailerContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/standard_padding_half"
@@ -225,7 +231,7 @@
                         android:id="@+id/divider"
                         android:layout_width="@dimen/match_constraint"
                         android:layout_height="@dimen/divider_height"
-                        android:background="@color/colorPrimaryDark"
+                        android:background="@color/colorAccent"
                         app:layout_constraintBottom_toTopOf="@+id/detailsUserReviewLabel"
                         app:layout_constraintEnd_toEndOf="@id/innerLayout"
                         app:layout_constraintStart_toStartOf="@id/innerLayout"
@@ -241,7 +247,7 @@
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/innerLayout"
                         app:layout_constraintTop_toBottomOf="@id/divider"
-                        tools:text="User Review:"
+                        tools:text="User Review"
                         />
 
                     <android.support.v7.widget.RecyclerView
@@ -260,6 +266,15 @@
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
+
+        <ProgressBar
+            android:id="@+id/contentLoadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
 
     </FrameLayout>
 

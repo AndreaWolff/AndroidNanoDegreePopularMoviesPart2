@@ -8,6 +8,7 @@ import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
 
 import java.util.List;
 
+@SuppressWarnings("SameParameterValue")
 public interface DetailsContract {
     interface View {
         void renderScreenTitle(@NonNull String title);
@@ -41,5 +42,11 @@ public interface DetailsContract {
         void setFavoriteButton(@NonNull Drawable drawable);
 
         void shareYouTubeTrailer(@NonNull String type, @NonNull String youTubeTrailer);
+
+        void hideMovieTrailerButtons();
+
+        void hideContentProgressBar();
+
+        void showContentProgressBar();
     }
 }

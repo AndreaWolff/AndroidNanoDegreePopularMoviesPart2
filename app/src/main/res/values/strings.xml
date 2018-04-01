@@ -7,15 +7,16 @@
 
     <!-- Details Activity -->
     <string name="details_movie_title">Movie Details</string>
-    <string name="details_release_date_label">Release Date:</string>
-    <string name="details_plot_synopsis_label">Plot Synopsis:</string>
+    <string name="details_release_date_label">Release Date</string>
+    <string name="details_plot_synopsis_label">Plot Synopsis</string>
     <string name="details_watch_trailer_button">Watch Trailer</string>
-    <string name="details_reviews_label">User Reviews:</string>
+    <string name="details_reviews_label"><![CDATA[<b>User Reviews</b>]]></string>
     <string name="details_no_reviews_label">There are no reviews for this movie.</string>
 
     <!-- Settings Menu -->
     <string name="setting_menu_popular_movies_title">Popular Movies</string>
     <string name="setting_menu_top_rated_movies_title">Top-Rated Movies</string>
+    <string name="setting_menu_favorite_movies_title">Favorite Movies</string>
     <string name="share_menu">Share</string>
 
     <!-- Common -->
