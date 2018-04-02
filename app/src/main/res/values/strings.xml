@@ -4,6 +4,7 @@
     <!-- Main Activity -->
     <string name="main_popular_movies_title">Popular Movies</string>
     <string name="main_top_rated_movies_title">Top-Rated Movies</string>
+    <string name="main_favorite_movies_title">Favorite Movies</string>
 
     <!-- Details Activity -->
     <string name="details_movie_title">Movie Details</string>
@@ -32,5 +33,6 @@
     <string name="error_message_timeout">Unable to connect, please try again later.</string>
     <string name="error_title">Error</string>
     <string name="error_message">Something went wrong, please try again later.</string>
+    <string name="error_no_favorite_movies">You currently have no favorite movies.</string>
 
 </resources>

@@ -46,20 +46,6 @@ public class MovieProvider extends ContentProvider {
         SQLiteDatabase db = movieDbHelper.getReadableDatabase();
 
         switch (uriMatcher.match(uri)) {
-//            case MOVIE_WITH_ID:
-//                String lastPathSegment = uri.getLastPathSegment();
-//                String[] selectionArguments = {lastPathSegment};
-//
-//                cursor = db.query(
-//                        TABLE_NAME,
-//                        projection,
-//                        COLUMN_MOVIE_FAVORITE + " = 1 ",
-//                        selectionArguments,
-//                        null,
-//                        null,
-//                        null
-//                );
-//                break;
             case MOVIE:
                 cursor = db.query(
                         TABLE_NAME,
@@ -124,7 +110,30 @@ public class MovieProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        int tasksUpdated;
+        int match = uriMatcher.match(uri);
+
+        switch (match) {
+            case MOVIE_WITH_ID:
+                tasksUpdated = db.update(TABLE_NAME,
+                                         values,
+                                         selection,
+                                         selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        if (getContext() == null) {
+            return -1;
+        }
+
+        if (tasksUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return tasksUpdated;
     }
 }

@@ -22,7 +22,7 @@ public class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesAd
         void onListItemClick(Movie movie);
     }
 
-    public FavoriteMoviesAdapter(@NonNull FavoriteMoviesAdapter.ListItemClickListener onClickListener) {
+    FavoriteMoviesAdapter(@NonNull FavoriteMoviesAdapter.ListItemClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
@@ -90,9 +90,7 @@ public class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesAd
             String movieBackdropPhoto = cursor.getString(columnMovieBackdropPhoto);
             int columnMovieFavorite = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE);
             int movieFavorite = cursor.getInt(columnMovieFavorite);
-
-            boolean isMovieFavorited;
-            isMovieFavorited = movieFavorite == 1;
+            boolean isMovieFavorited = movieFavorite == 1;
 
             return new Movie(movieId, movieTitle, movieReleaseDate, movieVoteAverage, moviePlotSynopsis, moviePoster, movieBackdropPhoto, isMovieFavorited);
         }

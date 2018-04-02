@@ -50,7 +50,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     @Inject
     DetailsPresenter presenter;
 
-    private boolean shareVisibility = true;
+    private boolean shareVisibility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +218,13 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @Override
+    public void showMovieTrailerButtons() {
+        binding.movieTrailerContent.setVisibility(VISIBLE);
+        shareVisibility = true;
+        invalidateOptionsMenu();
+    }
+
+    @Override
     public void hideMovieTrailerButtons() {
         binding.movieTrailerContent.setVisibility(GONE);
         shareVisibility = false;
@@ -225,15 +232,15 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @Override
-    public void hideContentProgressBar() {
-        binding.contentLoadingProgressBar.setVisibility(GONE);
-        binding.contentConstraintLayout.setVisibility(VISIBLE);
-    }
-
-    @Override
     public void showContentProgressBar() {
         binding.contentLoadingProgressBar.setVisibility(VISIBLE);
         binding.contentConstraintLayout.setVisibility(GONE);
+    }
+
+    @Override
+    public void hideContentProgressBar() {
+        binding.contentLoadingProgressBar.setVisibility(GONE);
+        binding.contentConstraintLayout.setVisibility(VISIBLE);
     }
     // endregion
 }

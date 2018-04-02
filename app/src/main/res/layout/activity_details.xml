@@ -196,6 +196,8 @@
                     app:layout_constraintBottom_toBottomOf="@id/detailsBackdropImageView"
                     app:layout_constraintEnd_toStartOf="@id/endGuideline"
                     app:layout_constraintStart_toEndOf="@id/middleGuideline"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     >
 
                     <include

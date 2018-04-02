@@ -43,10 +43,12 @@ public interface DetailsContract {
 
         void shareYouTubeTrailer(@NonNull String type, @NonNull String youTubeTrailer);
 
+        void showMovieTrailerButtons();
+
         void hideMovieTrailerButtons();
 
-        void hideContentProgressBar();
-
         void showContentProgressBar();
+
+        void hideContentProgressBar();
     }
 }

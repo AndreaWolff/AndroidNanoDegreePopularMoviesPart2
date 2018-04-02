@@ -11,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.andrea.popularmoviespart2.R;
+import com.andrea.popularmoviespart2.data.MovieContract;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepository;
 import com.andrea.popularmoviespart2.features.details.ui.DetailsActivity;
@@ -23,7 +24,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE;
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.CONTENT_URI;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.ERROR_MESSAGE_LOGGER;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.MOVIE;
@@ -129,9 +129,9 @@ public class MainPresenter {
                 return new CursorLoader(context,
                         CONTENT_URI,
                         null,
-                        null,
-                        null,
-                        COLUMN_MOVIE_FAVORITE + " = 1 "
+                        MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE + " = ?",
+                        new String[]{"1"},
+                        null
                 );
             default:
                 throw new RuntimeException("Loader Not Implemented: " + id);
@@ -147,7 +147,11 @@ public class MainPresenter {
             view.swapCursor(data);
 
             if (data.getCount() > 0) {
+                view.renderPopularMoviesTitle(context.getString(R.string.main_favorite_movies_title));
                 view.showFavoriteMoviesList();
+            } else {
+                view.showError("", context.getString(R.string.error_no_favorite_movies));
+                view.hideProgressBarOnMovieListError();
             }
 
         }
@@ -166,7 +170,6 @@ public class MainPresenter {
 
         if (view != null) {
             view.hideProgressBar();
-            view.renderPopularMoviesTitle(context.getString(R.string.setting_menu_favorite_movies_title));
             view.configureFavoriteMoviesAdapter();
             view.configureFavoriteMovieLoader(MOVIE_LOADER_ID, true);
         }

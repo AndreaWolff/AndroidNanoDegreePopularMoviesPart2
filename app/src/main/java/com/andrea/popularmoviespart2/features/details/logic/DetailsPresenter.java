@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.andrea.popularmoviespart2.R;
+import com.andrea.popularmoviespart2.data.MovieContract;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
@@ -33,6 +34,7 @@ import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_TITLE;
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE;
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.CONTENT_URI;
+import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.buildMovieId;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.ERROR_MESSAGE_LOGGER;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.MOVIE;
 
@@ -48,6 +50,7 @@ public class DetailsPresenter {
     private List<MovieReview> movieReviews;
 
     private boolean requestInProgress;
+    private boolean isFavorite;
 
     @Inject
     DetailsPresenter(@NonNull Context context,
@@ -73,13 +76,10 @@ public class DetailsPresenter {
     private void init() {
         if (view != null) {
             view.renderScreenTitle(context.getString(R.string.details_movie_title));
-
-            if (movie.isFavorite()) {
-                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
-            } else {
-                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
-            }
         }
+
+        isFavorite = movie.isFavorite();
+        refreshUI();
 
         populateDetails(movie.getTitle(),
                 movie.getReleaseDate(),
@@ -114,10 +114,6 @@ public class DetailsPresenter {
     }
 
     public void onResume() {
-        if (view != null) {
-            view.showProgressBar();
-        }
-
         if (movieReviews == null) {
             loadMovieReviews();
         } else {
@@ -136,8 +132,9 @@ public class DetailsPresenter {
     }
 
     public void favoriteSelected() {
-        if (!movie.isFavorite()) {
-            ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = new ContentValues();
+
+        if (!isFavorite) {
             contentValues.put(COLUMN_MOVIE_ID, movie.getId());
             contentValues.put(COLUMN_MOVIE_TITLE, movie.getTitle());
             contentValues.put(COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
@@ -149,15 +146,16 @@ public class DetailsPresenter {
 
             context.getContentResolver().insert(CONTENT_URI, contentValues);
 
-//            if (uri != null) {
-//                Toast.makeText(context, uri.toString(), Toast.LENGTH_LONG).show();
-//            }
-
-            view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
+            isFavorite = true;
+            refreshUI();
             return;
         }
 
-        view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
+        contentValues.put(COLUMN_MOVIE_FAVORITE, 0);
+        context.getContentResolver().update(buildMovieId(movie.getId()), contentValues, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{String.valueOf(movie.getId())});
+
+        isFavorite = false;
+        refreshUI();
     }
 
     public void shareYouTubeTrailer() {
@@ -180,7 +178,7 @@ public class DetailsPresenter {
         }
 
         requestInProgress = true;
-        view.showContentProgressBar();
+        refreshUI();
 
         disposable.add(movieRepository.getMovieTrailers(movie.getId())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -193,9 +191,9 @@ public class DetailsPresenter {
     }
 
     private void configureMovieReviews(List<MovieReview> movieReviews) {
-        if (view != null) {
-            view.hideProgressBar();
+        refreshUI();
 
+        if (view != null) {
             if (movieReviews.isEmpty()) {
                 view.renderReviewLabel(context.getString(R.string.details_no_reviews_label));
                 return;
@@ -208,14 +206,15 @@ public class DetailsPresenter {
 
     private void handleMovieTrailersResponseSuccessful(List<MovieTrailer> movieTrailers) {
         requestInProgress = false;
+        refreshUI();
 
         if (view != null) {
-            view.hideContentProgressBar();
-
             if (movieTrailers.isEmpty()) {
                 view.hideMovieTrailerButtons();
                 return;
             }
+
+            view.showMovieTrailerButtons();
         }
         movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
     }
@@ -233,11 +232,8 @@ public class DetailsPresenter {
     private void handleResponseError(Throwable error) {
         requestInProgress = false;
 
-        if (view != null) {
-            view.hideContentProgressBar();
-            view.hideProgressBar();
-            configureErrorMessage(error);
-        }
+        refreshUI();
+        configureErrorMessage(error);
     }
 
     private void configureErrorMessage(Throwable error) {
@@ -257,5 +253,23 @@ public class DetailsPresenter {
         }
 
         view.showError(errorTitle, errorMessage);
+    }
+
+    private void refreshUI() {
+        if (view != null) {
+            if (requestInProgress) {
+                view.showContentProgressBar();
+                view.showProgressBar();
+            } else {
+                view.hideContentProgressBar();
+                view.hideProgressBar();
+            }
+
+            if (isFavorite) {
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
+            } else {
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
+            }
+        }
     }
 }
