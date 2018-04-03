@@ -21,4 +21,6 @@ public interface MovieRepository {
 
     @NonNull Single<List<MovieReview>> getMovieReviews(@NonNull String id);
 
+    void clearMovieCache();
+
 }

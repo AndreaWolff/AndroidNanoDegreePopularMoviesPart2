@@ -54,4 +54,10 @@ public class MovieRepositoryDefault implements MovieRepository {
     @NonNull @Override public Single<List<MovieReview>> getMovieReviews(@NonNull String id) {
         return movieDao.getMovieReviews(id).map(MovieReviewsDto::toReviews);
     }
+
+    @Override
+    public void clearMovieCache() {
+        cachedPopularMovies = null;
+        cachedTopRatedMovies = null;
+    }
 }

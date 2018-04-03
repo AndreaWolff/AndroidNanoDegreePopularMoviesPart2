@@ -82,11 +82,11 @@ public class DetailsPresenter {
         refreshUI();
 
         populateDetails(movie.getTitle(),
-                movie.getReleaseDate(),
-                movie.getVoteAverage(),
-                movie.getPlotSynopsis(),
-                movie.getPosterPath(),
-                movie.getBackdropPhotoPath());
+                        movie.getReleaseDate(),
+                        movie.getVoteAverage(),
+                        movie.getPlotSynopsis(),
+                        movie.getPosterPath(),
+                        movie.getBackdropPhotoPath());
     }
 
     private void populateDetails(@NonNull String title,

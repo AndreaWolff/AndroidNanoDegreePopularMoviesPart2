@@ -40,6 +40,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MovieViewHolde
         return movieList != null && movieList.size() > 0 ? movieList.size() : 0;
     }
 
+    void clear() {
+        movieList.clear();
+        notifyDataSetChanged();
+    }
+
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView moviePosterImageView;

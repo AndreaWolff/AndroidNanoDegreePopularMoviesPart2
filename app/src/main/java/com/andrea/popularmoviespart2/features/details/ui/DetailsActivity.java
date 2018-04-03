@@ -154,15 +154,6 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     }
 
     @Override
-    public void getMovieTrailerIntent(@NonNull Intent appIntent, @NonNull Intent webIntent) {
-        try {
-            startActivity(appIntent);
-        } catch (ActivityNotFoundException ex) {
-            startActivity(webIntent);
-        }
-    }
-
-    @Override
     public void showError(@NonNull String errorTitle, @NonNull String errorMessage) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(errorTitle)
@@ -204,6 +195,15 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     @Override
     public void setFavoriteButton(@NonNull Drawable drawable) {
         binding.detailsFavoriteButton.setImageDrawable(drawable);
+    }
+
+    @Override
+    public void getMovieTrailerIntent(@NonNull Intent appIntent, @NonNull Intent webIntent) {
+        try {
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            startActivity(webIntent);
+        }
     }
 
     @Override

@@ -179,6 +179,23 @@ public class MainPresenter {
     }
     // endregion
 
+    public void swipeToRefresh() {
+        movieRepository.clearMovieCache();
+
+        if (view != null) {
+            view.clearMovieCache();
+        }
+
+        if (isPopularMovies) {
+            loadPopularMovies();
+            return;
+        }
+
+        if (isTopRatedMovies) {
+            loadTopRatedMovies();
+        }
+    }
+
     private void handlePopularMoviesResponseSuccessful(List<Movie> movies) {
         isPopularMovies = true;
         isTopRatedMovies = false;

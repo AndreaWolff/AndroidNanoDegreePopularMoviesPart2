@@ -27,8 +27,6 @@ public interface DetailsContract {
 
         void finishActivity();
 
-        void getMovieTrailerIntent(@NonNull Intent appIntent, @NonNull Intent webIntent);
-
         void showError(@NonNull String errorTitle, @NonNull String errorMessage);
 
         void showProgressBar();
@@ -40,6 +38,8 @@ public interface DetailsContract {
         void renderReviewLabel(@NonNull String label);
 
         void setFavoriteButton(@NonNull Drawable drawable);
+
+        void getMovieTrailerIntent(@NonNull Intent appIntent, @NonNull Intent webIntent);
 
         void shareYouTubeTrailer(@NonNull String type, @NonNull String youTubeTrailer);
 

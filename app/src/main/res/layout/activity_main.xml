@@ -12,23 +12,31 @@
         tools:context="com.andrea.popularmoviespart2.features.main.ui.MainActivity"
         >
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mainMoviePostersRecyclerView"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefreshContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/standard_padding_half"
-            android:paddingTop="@dimen/standard_padding_half"
-            />
+            android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/mainFavoriteMoviePostersRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/standard_padding_half"
-            android:paddingTop="@dimen/standard_padding_half"
-            />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mainMoviePostersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/standard_padding_half"
+                android:paddingTop="@dimen/standard_padding_half"
+                />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mainFavoriteMoviePostersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/standard_padding_half"
+                android:paddingTop="@dimen/standard_padding_half"
+                />
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"

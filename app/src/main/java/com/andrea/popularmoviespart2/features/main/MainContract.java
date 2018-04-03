@@ -34,5 +34,7 @@ public interface MainContract {
         void configureFavoriteMoviesAdapter();
 
         void swapCursor(@Nullable Cursor data);
+
+        void clearMovieCache();
     }
 }

@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Inject MainPresenter presenter;
 
+    private MainAdapter adapter;
     private FavoriteMoviesAdapter favoriteMoviesAdapter;
     private boolean favorite;
 
@@ -50,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .inject(this);
 
         presenter.connectView(this, savedInstanceState);
+
+        // Taken from https://guides.codepath.com/android/implementing-pull-to-refresh-guide#step-2-setup-swiperefreshlayout
+        binding.swipeToRefreshContainer.setOnRefreshListener(() -> presenter.swipeToRefresh());
+        binding.swipeToRefreshContainer.setColorSchemeResources(R.color.colorAccent);
 
         binding.mainMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, this.getResources().getInteger(R.integer.grid_span_count)));
         binding.mainMoviePostersRecyclerView.setHasFixedSize(true);
@@ -133,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override public void showMoviesList(@NonNull List<Movie> movieList) {
-        MainAdapter adapter = new MainAdapter(this, movieList);
+        adapter = new MainAdapter(this, movieList);
         binding.mainMoviePostersRecyclerView.setAdapter(adapter);
     }
 
@@ -190,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void swapCursor(@Nullable Cursor data) {
         favoriteMoviesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void clearMovieCache() {
+        adapter.clear();
+        binding.swipeToRefreshContainer.setRefreshing(false);
     }
     // endregion
 }
