@@ -1,5 +1,7 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
+import android.support.annotation.NonNull;
+
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,7 +15,7 @@ class MovieDto {
     @SerializedName("poster_path") private String posterPath;
     @SerializedName("backdrop_path") private String backdropPhotoPath;
 
-    Movie toMovie() {
+    @NonNull Movie toMovie() {
         return new Movie(id,
                 title,
                 releaseDate,

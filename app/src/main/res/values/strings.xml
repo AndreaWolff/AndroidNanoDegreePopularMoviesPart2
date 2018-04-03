@@ -31,8 +31,11 @@
     <string name="error_message_unauthorized">You are not authorized for this site. Please check you API key and try again.</string>
     <string name="error_title_timeout">Timeout</string>
     <string name="error_message_timeout">Unable to connect, please try again later.</string>
+    <string name="error_title_no_resolved_host">Connection Error</string>
+    <string name="error_message_no_resolved_host">Please check your connection and try again.</string>
     <string name="error_title">Error</string>
     <string name="error_message">Something went wrong, please try again later.</string>
+
     <string name="error_no_favorite_movies">You currently have no favorite movies.</string>
 
 </resources>

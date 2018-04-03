@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         presenter.connectView(this, savedInstanceState);
 
-        binding.mainMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, getApplicationContext().getResources().getInteger(R.integer.grid_span_count)));
+        binding.mainMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, this.getResources().getInteger(R.integer.grid_span_count)));
         binding.mainMoviePostersRecyclerView.setHasFixedSize(true);
 
         binding.mainFavoriteMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, getApplicationContext().getResources().getInteger(R.integer.grid_span_count)));

@@ -127,7 +127,7 @@ public class MovieProvider extends ContentProvider {
         }
 
         if (getContext() == null) {
-            return -1;
+            return 0;
         }
 
         if (tasksUpdated != 0) {

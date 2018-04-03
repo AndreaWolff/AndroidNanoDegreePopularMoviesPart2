@@ -3,6 +3,7 @@ package com.andrea.popularmoviespart2.data;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 public class MovieContract {
 
@@ -25,11 +26,11 @@ public class MovieContract {
         public static final String COLUMN_MOVIE_BACKDROP_PHOTO_PATH = "movie_backdrop_photo_path";
         public static final String COLUMN_MOVIE_FAVORITE = "movie_favorite";
 
-        public static Uri buildMovieUri(long id) {
+        @NonNull public static Uri buildMovieUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static Uri buildMovieId(String movieId) {
+        @NonNull public static Uri buildMovieId(String movieId) {
             return CONTENT_URI.buildUpon().appendPath(movieId).build();
         }
     }

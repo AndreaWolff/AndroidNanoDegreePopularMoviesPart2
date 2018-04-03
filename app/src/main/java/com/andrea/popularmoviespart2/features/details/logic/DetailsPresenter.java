@@ -152,15 +152,19 @@ public class DetailsPresenter {
         }
 
         contentValues.put(COLUMN_MOVIE_FAVORITE, 0);
-        context.getContentResolver().update(buildMovieId(movie.getId()), contentValues, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{String.valueOf(movie.getId())});
+        context.getContentResolver().update(buildMovieId(movie.getId()),
+                                            contentValues,
+                                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+                                            new String[]{String.valueOf(movie.getId())});
 
         isFavorite = false;
         refreshUI();
     }
 
     public void shareYouTubeTrailer() {
-        if (view != null) {
-            view.shareYouTubeTrailer("text/plain", "http://www.youtube.com/watch?v=" + movieTrailer.getKey());
+        if (view != null && movieTrailer != null) {
+            view.shareYouTubeTrailer("text/plain",
+                                      movieTrailer.getYouTubeTrailerWebUrl().toString());
         }
     }
 
@@ -240,19 +244,47 @@ public class DetailsPresenter {
         String errorTitle;
         String errorMessage;
 
-        if (error.getMessage().equals("HTTP 401 Unauthorized")) {
-            errorTitle = context.getString(R.string.error_title_unauthorized);
-            errorMessage = context.getString(R.string.error_message_unauthorized);
-        } else if (error.getMessage().equals("timeout")) {
-            errorTitle = context.getString(R.string.error_title_timeout);
-            errorMessage = context.getString(R.string.error_message_timeout);
-        } else {
+        if (error.getCause() == null) {
             errorTitle = context.getString(R.string.error_title);
             errorMessage = context.getString(R.string.error_message);
-            Log.d(ERROR_MESSAGE_LOGGER, error.getMessage());
+            configureErrorDialog(errorTitle, errorMessage);
+            return;
         }
 
-        view.showError(errorTitle, errorMessage);
+        if (error.getMessage() == null) {
+            errorTitle = context.getString(R.string.error_title);
+            errorMessage = context.getString(R.string.error_message);
+            configureErrorDialog(errorTitle, errorMessage);
+            return;
+        }
+
+        switch (error.getMessage()) {
+            case "HTTP 401 Unauthorized":
+                errorTitle = context.getString(R.string.error_title_unauthorized);
+                errorMessage = context.getString(R.string.error_message_unauthorized);
+                break;
+            case "timeout":
+                errorTitle = context.getString(R.string.error_title_timeout);
+                errorMessage = context.getString(R.string.error_message_timeout);
+                break;
+            case "Unable to resolve host \"api.themoviedb.org\": No address associated with hostname":
+                errorTitle = context.getString(R.string.error_title_no_resolved_host);
+                errorMessage = context.getString(R.string.error_message_no_resolved_host);
+                break;
+            default:
+                errorTitle = context.getString(R.string.error_title);
+                errorMessage = context.getString(R.string.error_message);
+                Log.d(ERROR_MESSAGE_LOGGER, error.getMessage());
+                break;
+        }
+
+        configureErrorDialog(errorTitle, errorMessage);
+    }
+
+    private void configureErrorDialog(String errorTitle, String errorMessage) {
+        if (view != null) {
+            view.showError(errorTitle, errorMessage);
+        }
     }
 
     private void refreshUI() {
