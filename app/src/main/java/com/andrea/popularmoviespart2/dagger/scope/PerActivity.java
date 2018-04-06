@@ -1,7 +1,6 @@
 package com.andrea.popularmoviespart2.dagger.scope;
 
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 

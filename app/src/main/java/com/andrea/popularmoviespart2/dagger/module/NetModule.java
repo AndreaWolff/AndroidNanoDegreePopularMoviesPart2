@@ -2,6 +2,8 @@ package com.andrea.popularmoviespart2.dagger.module;
 
 import android.support.annotation.NonNull;
 
+import com.andrea.popularmoviespart2.features.common.ContentResolver;
+import com.andrea.popularmoviespart2.features.common.ContentResolverDefault;
 import com.andrea.popularmoviespart2.features.common.repository.MovieDao;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepository;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepositoryDefault;
@@ -58,5 +60,8 @@ public class NetModule {
     MovieRepository movieRepository(MovieRepositoryDefault impl) {
         return impl;
     }
+
+    @Singleton @Provides
+    ContentResolver contentResolver(ContentResolverDefault impl) { return  impl; }
 
 }

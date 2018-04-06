@@ -35,7 +35,7 @@ import static android.view.View.VISIBLE;
 
 public class DetailsActivity extends AppCompatActivity implements DetailsContract.View {
 
-    ActivityDetailsBinding binding;
+    private ActivityDetailsBinding binding;
 
     @OnClick(R.id.details_play_trailer_button)
     public void onWatchTrailerSelected() {
@@ -47,8 +47,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
         presenter.favoriteSelected();
     }
 
-    @Inject
-    DetailsPresenter presenter;
+    @Inject DetailsPresenter presenter;
 
     private boolean shareVisibility;
 

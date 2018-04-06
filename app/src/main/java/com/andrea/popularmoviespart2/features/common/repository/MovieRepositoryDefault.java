@@ -1,8 +1,8 @@
 package com.andrea.popularmoviespart2.features.common.repository;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-import com.andrea.popularmoviespart2.features.common.ActivityConstants;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
@@ -55,9 +55,19 @@ public class MovieRepositoryDefault implements MovieRepository {
         return movieDao.getMovieReviews(id).map(MovieReviewsDto::toReviews);
     }
 
-    @Override
-    public void clearMovieCache() {
-        cachedPopularMovies = null;
-        cachedTopRatedMovies = null;
+    @NonNull @Override public Single<List<Movie>> getRefreshedPopularMovies() {
+        return movieDao.getPopularMoviesList().map(MoviesDto::toMovies);
+    }
+
+    @NonNull @Override public Single<List<Movie>> getRefreshedTopRatedMovies() {
+        return movieDao.getTopRatedMoviesList().map(MoviesDto::toMovies);
+    }
+
+    @Nullable @Override public List<Movie> getCachedPopularMovies() {
+        return cachedPopularMovies;
+    }
+
+    @Nullable @Override public List<Movie> getCachedTopRatedMovies() {
+        return cachedTopRatedMovies;
     }
 }

@@ -8,9 +8,6 @@
     <dimen name="standard_padding_half">8dp</dimen>
     <dimen name="standard_padding">16dp</dimen>
 
-    <dimen name="padding_19">19dp</dimen>
-    <dimen name="padding_20">20dp</dimen>
-
     <dimen name="poster_image_top_height">130dp</dimen>
     <dimen name="poster_image_height">250dp</dimen>
     <dimen name="poster_image_width">150dp</dimen>

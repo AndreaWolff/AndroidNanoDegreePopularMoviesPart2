@@ -13,6 +13,8 @@ import com.andrea.popularmoviespart2.data.MovieContract;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.util.GlideUtil;
 
+import static com.andrea.popularmoviespart2.features.main.ui.MovieTransformer.transformToMovie;
+
 public class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesAdapter.FavoriteMoviesViewHolder> {
 
     private Cursor cursor;
@@ -69,30 +71,7 @@ public class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesAd
         @Override
         public void onClick(View view) {
             cursor.moveToPosition(getAdapterPosition());
-            onClickListener.onListItemClick(configureMovie());
-        }
-
-        @NonNull
-        private Movie configureMovie() {
-            int columnMovieId = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
-            String movieId = cursor.getString(columnMovieId);
-            int columnMovieTitle = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE);
-            String movieTitle = cursor.getString(columnMovieTitle);
-            int columnMovieReleaseDate = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE);
-            String movieReleaseDate = cursor.getString(columnMovieReleaseDate);
-            int columnMovieVoteAverage = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE);
-            float movieVoteAverage = cursor.getFloat(columnMovieVoteAverage);
-            int columnMoviePlotSynopsis = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_PLOT_SYNOPSIS);
-            String moviePlotSynopsis = cursor.getString(columnMoviePlotSynopsis);
-            int columnMoviePoster = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH);
-            String moviePoster = cursor.getString(columnMoviePoster);
-            int columnMovieBackdropPhoto = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PHOTO_PATH);
-            String movieBackdropPhoto = cursor.getString(columnMovieBackdropPhoto);
-            int columnMovieFavorite = cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE);
-            int movieFavorite = cursor.getInt(columnMovieFavorite);
-            boolean isMovieFavorited = movieFavorite == 1;
-
-            return new Movie(movieId, movieTitle, movieReleaseDate, movieVoteAverage, moviePlotSynopsis, moviePoster, movieBackdropPhoto, isMovieFavorited);
+            onClickListener.onListItemClick(transformToMovie(cursor));
         }
     }
 }

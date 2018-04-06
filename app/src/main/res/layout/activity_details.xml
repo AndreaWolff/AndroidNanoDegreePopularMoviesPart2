@@ -31,6 +31,7 @@
                     android:layout_height="@dimen/backdrop_image_height"
                     android:contentDescription="@string/movie_backdrop_image_description"
                     android:scaleType="centerCrop"
+                    android:alpha="0.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

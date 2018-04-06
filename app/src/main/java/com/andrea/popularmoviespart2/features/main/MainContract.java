@@ -29,12 +29,12 @@ public interface MainContract {
 
         void navigateToMovieDetails(@NonNull Intent intent);
 
-        void configureFavoriteMovieLoader(int loaderId, boolean isFavorite);
+        void configureFavoriteMovieLoader(int loaderId);
 
         void configureFavoriteMoviesAdapter();
 
         void swapCursor(@Nullable Cursor data);
 
-        void clearMovieCache();
+        void hideSwipeToRefresh();
     }
 }

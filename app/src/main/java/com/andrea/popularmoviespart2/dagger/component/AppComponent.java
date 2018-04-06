@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.andrea.popularmoviespart2.dagger.module.AppModule;
 import com.andrea.popularmoviespart2.dagger.module.NetModule;
+import com.andrea.popularmoviespart2.features.common.ContentResolver;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepository;
 
 import javax.inject.Singleton;
@@ -16,4 +17,6 @@ public interface AppComponent {
     MovieRepository getMovieRepository();
 
     Context getContext();
+
+    ContentResolver getContentResolver();
 }

@@ -1,6 +1,5 @@
 package com.andrea.popularmoviespart2.features.details.logic;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +7,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.andrea.popularmoviespart2.R;
-import com.andrea.popularmoviespart2.data.MovieContract;
+import com.andrea.popularmoviespart2.features.common.ContentResolver;
+import com.andrea.popularmoviespart2.features.common.ServerError;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.features.common.domain.MovieReview;
 import com.andrea.popularmoviespart2.features.common.domain.MovieTrailer;
@@ -25,16 +25,6 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PHOTO_PATH;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_ID;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_PLOT_SYNOPSIS;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_PATH;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_TITLE;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_VOTE_AVERAGE;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.CONTENT_URI;
-import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.buildMovieId;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.ERROR_MESSAGE_LOGGER;
 import static com.andrea.popularmoviespart2.features.common.ActivityConstants.MOVIE;
 
@@ -42,6 +32,7 @@ public class DetailsPresenter {
 
     private final Context context;
     private final MovieRepository movieRepository;
+    private final ContentResolver contentResolver;
     private final CompositeDisposable disposable = new CompositeDisposable();
 
     private DetailsContract.View view;
@@ -54,9 +45,11 @@ public class DetailsPresenter {
 
     @Inject
     DetailsPresenter(@NonNull Context context,
-                     @NonNull MovieRepository movieRepository) {
+                     @NonNull MovieRepository movieRepository,
+                     @NonNull ContentResolver contentResolver) {
         this.context = context;
         this.movieRepository = movieRepository;
+        this.contentResolver = contentResolver;
     }
 
     public void connectView(@NonNull DetailsContract.View view, @NonNull Intent intent) {
@@ -79,6 +72,11 @@ public class DetailsPresenter {
         }
 
         isFavorite = movie.isFavorite();
+
+        if (!isFavorite) {
+            isFavorite = contentResolver.getFavoriteMovie(movie.getId());
+        }
+
         refreshUI();
 
         populateDetails(movie.getTitle(),
@@ -87,6 +85,51 @@ public class DetailsPresenter {
                         movie.getPlotSynopsis(),
                         movie.getPosterPath(),
                         movie.getBackdropPhotoPath());
+    }
+
+    public void disconnectView() {
+        view = null;
+    }
+
+    public void onResume() {
+        if (movieReviews == null) {
+            loadMovieReviews();
+        } else {
+            configureMovieReviews(movieReviews);
+        }
+
+        if (movieTrailer == null) {
+            loadMovieTrailers();
+        }
+    }
+
+    public void favoriteSelected() {
+        if (!isFavorite) {
+            contentResolver.insertFavoriteMovie(movie);
+
+            isFavorite = true;
+            refreshUI();
+            return;
+        }
+
+        contentResolver.updateFavoriteMovie(movie);
+
+        isFavorite = false;
+        refreshUI();
+    }
+
+    public void shareYouTubeTrailer() {
+        if (view != null && movieTrailer != null) {
+            view.shareYouTubeTrailer("text/plain", movieTrailer.getYouTubeTrailerWebUrl().toString());
+        }
+    }
+
+    public void watchTrailerSelected() {
+        if (movieTrailer == null) {
+            return;
+        }
+
+        configureMovieTrailer();
     }
 
     private void populateDetails(@NonNull String title,
@@ -109,71 +152,10 @@ public class DetailsPresenter {
         }
     }
 
-    public void disconnectView() {
-        view = null;
-    }
-
-    public void onResume() {
-        if (movieReviews == null) {
-            loadMovieReviews();
-        } else {
-            configureMovieReviews(movieReviews);
-        }
-
-        if (movieTrailer == null) {
-            loadMovieTrailers();
-        }
-    }
-
     private void loadMovieReviews() {
         disposable.add(movieRepository.getMovieReviews(movie.getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleMovieReviewsResponseSuccessful, this::handleResponseError));
-    }
-
-    public void favoriteSelected() {
-        ContentValues contentValues = new ContentValues();
-
-        if (!isFavorite) {
-            contentValues.put(COLUMN_MOVIE_ID, movie.getId());
-            contentValues.put(COLUMN_MOVIE_TITLE, movie.getTitle());
-            contentValues.put(COLUMN_MOVIE_RELEASE_DATE, movie.getReleaseDate());
-            contentValues.put(COLUMN_MOVIE_VOTE_AVERAGE, movie.getVoteAverage());
-            contentValues.put(COLUMN_MOVIE_PLOT_SYNOPSIS, movie.getPlotSynopsis());
-            contentValues.put(COLUMN_MOVIE_POSTER_PATH, movie.getPosterPath());
-            contentValues.put(COLUMN_MOVIE_BACKDROP_PHOTO_PATH, movie.getBackdropPhotoPath());
-            contentValues.put(COLUMN_MOVIE_FAVORITE, 1);
-
-            context.getContentResolver().insert(CONTENT_URI, contentValues);
-
-            isFavorite = true;
-            refreshUI();
-            return;
-        }
-
-        contentValues.put(COLUMN_MOVIE_FAVORITE, 0);
-        context.getContentResolver().update(buildMovieId(movie.getId()),
-                                            contentValues,
-                                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
-                                            new String[]{String.valueOf(movie.getId())});
-
-        isFavorite = false;
-        refreshUI();
-    }
-
-    public void shareYouTubeTrailer() {
-        if (view != null && movieTrailer != null) {
-            view.shareYouTubeTrailer("text/plain",
-                                      movieTrailer.getYouTubeTrailerWebUrl().toString());
-        }
-    }
-
-    public void watchTrailerSelected() {
-        if (movieTrailer == null) {
-            return;
-        }
-
-        configureMovieTrailer();
     }
 
     private void loadMovieTrailers() {
@@ -243,33 +225,24 @@ public class DetailsPresenter {
     private void configureErrorMessage(Throwable error) {
         String errorTitle;
         String errorMessage;
+        String reasonForError = ServerError.getReasonForError(error);
 
-        if (error.getCause() == null) {
-            errorTitle = context.getString(R.string.error_title);
-            errorMessage = context.getString(R.string.error_message);
-            configureErrorDialog(errorTitle, errorMessage);
-            return;
-        }
-
-        if (error.getMessage() == null) {
-            errorTitle = context.getString(R.string.error_title);
-            errorMessage = context.getString(R.string.error_message);
-            configureErrorDialog(errorTitle, errorMessage);
-            return;
-        }
-
-        switch (error.getMessage()) {
-            case "HTTP 401 Unauthorized":
+        switch (reasonForError) {
+            case "unauthorizedError":
                 errorTitle = context.getString(R.string.error_title_unauthorized);
                 errorMessage = context.getString(R.string.error_message_unauthorized);
                 break;
-            case "timeout":
+            case "timeoutError":
                 errorTitle = context.getString(R.string.error_title_timeout);
                 errorMessage = context.getString(R.string.error_message_timeout);
                 break;
-            case "Unable to resolve host \"api.themoviedb.org\": No address associated with hostname":
+            case "noHostError":
                 errorTitle = context.getString(R.string.error_title_no_resolved_host);
                 errorMessage = context.getString(R.string.error_message_no_resolved_host);
+                break;
+            case "defaultError":
+                errorTitle = context.getString(R.string.error_title);
+                errorMessage = context.getString(R.string.error_message);
                 break;
             default:
                 errorTitle = context.getString(R.string.error_title);
@@ -278,10 +251,6 @@ public class DetailsPresenter {
                 break;
         }
 
-        configureErrorDialog(errorTitle, errorMessage);
-    }
-
-    private void configureErrorDialog(String errorTitle, String errorMessage) {
         if (view != null) {
             view.showError(errorTitle, errorMessage);
         }

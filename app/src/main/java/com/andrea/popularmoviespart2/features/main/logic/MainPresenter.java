@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.andrea.popularmoviespart2.R;
 import com.andrea.popularmoviespart2.data.MovieContract;
+import com.andrea.popularmoviespart2.features.common.ServerError;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 import com.andrea.popularmoviespart2.features.common.repository.MovieRepository;
 import com.andrea.popularmoviespart2.features.details.ui.DetailsActivity;
@@ -77,7 +78,6 @@ public class MainPresenter {
     }
 
     private void init() {
-
         if (view != null) {
             view.renderPopularMoviesTitle(context.getString(R.string.main_popular_movies_title));
         }
@@ -129,24 +129,19 @@ public class MainPresenter {
         switch (id) {
             case MOVIE_LOADER_ID:
                 return new CursorLoader(context,
-                        CONTENT_URI,
-                        null,
-                        MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE + " = ?",
-                        new String[]{"1"},
-                        null
+                                        CONTENT_URI,
+                                        null,
+                                        MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE + " = ?",
+                                        new String[]{"1"},
+                                        null
                 );
             default:
                 throw new RuntimeException("Loader Not Implemented: " + id);
         }
     }
 
-    public void onLoadFinished(@NonNull Cursor data, boolean isFavorite) {
+    public void onLoadFinished(@NonNull Cursor data) {
         if (view != null) {
-
-            if (!isFavorite) {
-                return;
-            }
-
             view.renderPopularMoviesTitle(context.getString(R.string.main_favorite_movies_title));
             view.swapCursor(data);
 
@@ -167,95 +162,112 @@ public class MainPresenter {
     }
 
     public void loadFavoriteMovies() {
-        isFavoriteMovies = true;
-        isTopRatedMovies = false;
-        isPopularMovies = false;
+        configureMovieListOrigins(false, false, true);
 
         if (view != null) {
             view.hideProgressBar();
             view.configureFavoriteMoviesAdapter();
-            view.configureFavoriteMovieLoader(MOVIE_LOADER_ID, true);
+            view.configureFavoriteMovieLoader(MOVIE_LOADER_ID);
         }
     }
     // endregion
 
     public void swipeToRefresh() {
-        movieRepository.clearMovieCache();
-
-        if (view != null) {
-            view.clearMovieCache();
-        }
-
         if (isPopularMovies) {
-            loadPopularMovies();
+            disposable.add(movieRepository.getRefreshedPopularMovies()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleRefreshedMoviesResponseSuccessful, this::handleRefreshMoviesResponseError));
             return;
         }
 
         if (isTopRatedMovies) {
-            loadTopRatedMovies();
+            disposable.add(movieRepository.getRefreshedTopRatedMovies()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleRefreshedMoviesResponseSuccessful, this::handleRefreshMoviesResponseError));
         }
     }
 
+    // region Movie Lists
     private void handlePopularMoviesResponseSuccessful(List<Movie> movies) {
-        isPopularMovies = true;
-        isTopRatedMovies = false;
-        isFavoriteMovies = false;
+        configureMovieListOrigins(true, false, false);
 
         if (view != null) {
             view.hideProgressBar();
+            view.hideSwipeToRefresh();
             view.showMoviesList(movies);
         }
     }
 
     private void handleTopRatedMoviesResponseSuccessful(List<Movie> movies) {
-        isTopRatedMovies = true;
-        isPopularMovies = false;
-        isFavoriteMovies = false;
+        configureMovieListOrigins(false, true, false);
 
         if (view != null) {
             view.hideProgressBar();
+            view.hideSwipeToRefresh();
             view.showMoviesList(movies);
+        }
+    }
+
+    private void handleRefreshedMoviesResponseSuccessful(List<Movie> movies) {
+        if (view != null) {
+            view.hideSwipeToRefresh();
+            view.showMoviesList(movies);
+        }
+    }
+
+    private void handleRefreshMoviesResponseError(Throwable error) {
+        if (view != null) {
+            view.hideSwipeToRefresh();
+
+            configureErrorMessage(error);
+
+            if (isPopularMovies) {
+                List<Movie> cachedPopularMovies = movieRepository.getCachedPopularMovies();
+                if (cachedPopularMovies != null) {
+                    view.showMoviesList(cachedPopularMovies);
+                }
+                return;
+            }
+
+            if (isTopRatedMovies) {
+                List<Movie> cachedTopRatedMovies = movieRepository.getCachedTopRatedMovies();
+                if (cachedTopRatedMovies != null) {
+                    view.showMoviesList(cachedTopRatedMovies);
+                }
+            }
         }
     }
 
     private void handleResponseError(Throwable error) {
         if (view != null) {
             view.hideProgressBarOnMovieListError();
-
-            configureErrorMessage(error);
+            view.hideSwipeToRefresh();
         }
+
+        configureErrorMessage(error);
     }
 
     private void configureErrorMessage(Throwable error) {
         String errorTitle;
         String errorMessage;
+        String reasonForError = ServerError.getReasonForError(error);
 
-        if (error.getCause() == null) {
-            errorTitle = context.getString(R.string.error_title);
-            errorMessage = context.getString(R.string.error_message);
-            configureErrorDialog(errorTitle, errorMessage);
-            return;
-        }
-
-        if (error.getMessage() == null) {
-            errorTitle = context.getString(R.string.error_title);
-            errorMessage = context.getString(R.string.error_message);
-            configureErrorDialog(errorTitle, errorMessage);
-            return;
-        }
-
-        switch (error.getMessage()) {
-            case "HTTP 401 Unauthorized":
+        switch (reasonForError) {
+            case "unauthorizedError":
                 errorTitle = context.getString(R.string.error_title_unauthorized);
                 errorMessage = context.getString(R.string.error_message_unauthorized);
                 break;
-            case "timeout":
+            case "timeoutError":
                 errorTitle = context.getString(R.string.error_title_timeout);
                 errorMessage = context.getString(R.string.error_message_timeout);
                 break;
-            case "Unable to resolve host \"api.themoviedb.org\": No address associated with hostname":
+            case "noHostError":
                 errorTitle = context.getString(R.string.error_title_no_resolved_host);
                 errorMessage = context.getString(R.string.error_message_no_resolved_host);
+                break;
+            case "defaultError":
+                errorTitle = context.getString(R.string.error_title);
+                errorMessage = context.getString(R.string.error_message);
                 break;
             default:
                 errorTitle = context.getString(R.string.error_title);
@@ -264,12 +276,15 @@ public class MainPresenter {
                 break;
         }
 
-        configureErrorDialog(errorTitle, errorMessage);
-    }
-
-    private void configureErrorDialog(String errorTitle, String errorMessage) {
         if (view != null) {
             view.showError(errorTitle, errorMessage);
         }
+    }
+    // endregion
+
+    private void configureMovieListOrigins(boolean isPopularMovies, boolean isTopRatedMovies, boolean isFavoriteMovies) {
+        this.isPopularMovies = isPopularMovies;
+        this.isTopRatedMovies = isTopRatedMovies;
+        this.isFavoriteMovies = isFavoriteMovies;
     }
 }

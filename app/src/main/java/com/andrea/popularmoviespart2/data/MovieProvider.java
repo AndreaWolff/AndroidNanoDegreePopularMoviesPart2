@@ -2,6 +2,7 @@ package com.andrea.popularmoviespart2.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,14 +18,14 @@ import static com.andrea.popularmoviespart2.data.MovieContract.PATH_MOVIE;
 
 public class MovieProvider extends ContentProvider {
 
-    public static final int MOVIE = 100;
-    public static final int MOVIE_WITH_ID = 101;
+    private static final int MOVIE = 100;
+    private static final int MOVIE_WITH_ID = 101;
 
     private static final UriMatcher uriMatcher = buildUriMatcher();
 
     private MovieDbHelper movieDbHelper;
 
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
         UriMatcher matcher = new UriMatcher(NO_MATCH);
 
         matcher.addURI(CONTENT_AUTHORITY, PATH_MOVIE, MOVIE);
@@ -47,25 +48,25 @@ public class MovieProvider extends ContentProvider {
 
         switch (uriMatcher.match(uri)) {
             case MOVIE:
-                cursor = db.query(
-                        TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
+                cursor = db.query(TABLE_NAME,
+                                  projection,
+                                  selection,
+                                  selectionArgs,
+                                  null,
+                                  null,
+                                  sortOrder
                 );
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (getContext() == null) {
+        Context context = getContext();
+        if (context == null) {
             return null;
         }
 
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        cursor.setNotificationUri(context.getContentResolver(), uri);
         return cursor;
     }
 
@@ -96,11 +97,12 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (getContext() == null) {
+        Context context = getContext();
+        if (context == null) {
             return null;
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        context.getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
 
@@ -126,12 +128,13 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (getContext() == null) {
+        Context context = getContext();
+        if (context == null) {
             return 0;
         }
 
         if (tasksUpdated != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+            context.getContentResolver().notifyChange(uri, null);
         }
 
         return tasksUpdated;

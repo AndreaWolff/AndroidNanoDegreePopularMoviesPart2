@@ -33,13 +33,11 @@ import static com.andrea.popularmoviespart2.features.common.ActivityConstants.MO
 public class MainActivity extends AppCompatActivity implements MainContract.View, MainAdapter.ListItemClickListener,
                                                                FavoriteMoviesAdapter.ListItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
 
     @Inject MainPresenter presenter;
 
-    private MainAdapter adapter;
     private FavoriteMoviesAdapter favoriteMoviesAdapter;
-    private boolean favorite;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,23 +54,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         binding.swipeToRefreshContainer.setOnRefreshListener(() -> presenter.swipeToRefresh());
         binding.swipeToRefreshContainer.setColorSchemeResources(R.color.colorAccent);
 
-        binding.mainMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, this.getResources().getInteger(R.integer.grid_span_count)));
-        binding.mainMoviePostersRecyclerView.setHasFixedSize(true);
-
-        binding.mainFavoriteMoviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, getApplicationContext().getResources().getInteger(R.integer.grid_span_count)));
-        binding.mainFavoriteMoviePostersRecyclerView.setHasFixedSize(true);
+        binding.moviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, this.getResources().getInteger(R.integer.grid_span_count)));
+        binding.moviePostersRecyclerView.setHasFixedSize(true);
     }
 
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         presenter.onSavedInstanceState(outState);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
     }
 
     @Override protected void onDestroy() {
@@ -89,14 +77,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_popular_movies:
-                favorite = false;
+                getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
                 presenter.loadPopularMovies();
                 return true;
             case R.id.menu_top_rated_movies:
-                favorite = false;
+                getSupportLoaderManager().destroyLoader(MOVIE_LOADER_ID);
                 presenter.loadTopRatedMovies();
                 return true;
             case R.id.menu_favorite_movies:
+                getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, this);
                 presenter.loadFavoriteMovies();
                 return true;
             default:
@@ -119,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        presenter.onLoadFinished(data, favorite);
+        presenter.onLoadFinished(data);
     }
 
     @Override
@@ -138,14 +127,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override public void showMoviesList(@NonNull List<Movie> movieList) {
-        adapter = new MainAdapter(this, movieList);
-        binding.mainMoviePostersRecyclerView.setAdapter(adapter);
+        MainAdapter adapter = new MainAdapter(this, movieList);
+        binding.moviePostersRecyclerView.setAdapter(adapter);
     }
 
     @Override
     public void showFavoriteMoviesList() {
-        binding.mainFavoriteMoviePostersRecyclerView.setVisibility(VISIBLE);
-        binding.mainMoviePostersRecyclerView.setVisibility(GONE);
+        binding.moviePostersRecyclerView.setVisibility(VISIBLE);
     }
 
     @Override public void showError(@NonNull String title, @NonNull String errorMessage) {
@@ -160,19 +148,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override public void showProgressBar() {
-        binding.mainMoviePostersRecyclerView.setVisibility(GONE);
-        binding.mainFavoriteMoviePostersRecyclerView.setVisibility(GONE);
+        binding.moviePostersRecyclerView.setVisibility(GONE);
         binding.loadingProgressBar.setVisibility(VISIBLE);
     }
 
     @Override public void hideProgressBar() {
-        binding.mainMoviePostersRecyclerView.setVisibility(VISIBLE);
+        binding.moviePostersRecyclerView.setVisibility(VISIBLE);
         binding.loadingProgressBar.setVisibility(GONE);
     }
 
     @Override public void hideProgressBarOnMovieListError() {
-        binding.mainMoviePostersRecyclerView.setVisibility(GONE);
-        binding.mainFavoriteMoviePostersRecyclerView.setVisibility(GONE);
+        binding.moviePostersRecyclerView.setVisibility(GONE);
         binding.loadingProgressBar.setVisibility(GONE);
     }
 
@@ -181,15 +167,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void configureFavoriteMovieLoader(int loaderId, boolean isFavorite) {
-        favorite = isFavorite;
+    public void configureFavoriteMovieLoader(int loaderId) {
         getSupportLoaderManager().initLoader(MOVIE_LOADER_ID, null, this);
     }
 
     @Override
     public void configureFavoriteMoviesAdapter() {
         favoriteMoviesAdapter = new FavoriteMoviesAdapter(this);
-        binding.mainFavoriteMoviePostersRecyclerView.setAdapter(favoriteMoviesAdapter);
+        binding.moviePostersRecyclerView.setAdapter(favoriteMoviesAdapter);
     }
 
     @Override
@@ -198,8 +183,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void clearMovieCache() {
-        adapter.clear();
+    public void hideSwipeToRefresh() {
         binding.swipeToRefreshContainer.setRefreshing(false);
     }
     // endregion
