@@ -120,7 +120,8 @@ public class DetailsPresenter {
     }
 
     public void shareYouTubeTrailer() {
-        if (view != null && movieTrailer != null) {
+        if (view != null && movieTrailers != null) {
+            movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
             view.shareYouTubeTrailer("text/plain", movieTrailer.getYouTubeTrailerWebUrl().toString());
         }
     }
@@ -207,7 +208,9 @@ public class DetailsPresenter {
     }
 
     private void configureMovieTrailer() {
-        movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+        if (movieTrailer == null) {
+            movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+        }
 
         // Taken from https://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
         Intent appIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerAppUrl());
