@@ -1,12 +1,11 @@
 <h1>Android Nanodegree Popular Movies - Part 2</h1>
 
 <b>Project Overview</b>
-<p>Welcome back to Popular Movies! In this Second and Final Part, I added additional functionality to the app I built in Part 1.</p>
-<p>Recall from Part 1, we developed a User Interface that presented the user with a grid of movie posters, allowed users to change sort order, 
-and presented the Movie Details of a selected movie.</p>
-<p>These additional features include:
+<p>Welcome back to Popular Movies! In this Second and Final Part, I added additional functionality to the app built in Part 1.</p>
+<p>Recall from Part 1, we developed a User Interface that displayed the user with a grid of movie posters, allowing them to change the sort order from Popular to Top-Rated Movies, it also displayed the Movie Details of that selected movie.</p>
+<p>The below additional features have now been included:
 <ul>
-  <li>Allowing the user play and share trailers</li>
+  <li>Allowing the user play and share Movie Trailers</li>
     <ul>
       <li>in the YouTube app, or</li>
       <li>in a web browser</li>
@@ -14,18 +13,19 @@ and presented the Movie Details of a selected movie.</p>
   <li>Allowing the user to read reviews on a selected movie</li>
   <li>Allowing the user to mark a movie as a favorite in the Movie Details by tapping on the heart</li>
   <li>Allowing the user to not only sort through the Popular and Top-Rated Movies, but also show a list of their Favorite Movies</li>
-  <li>Include a better user experience by including the following:</li>
+  <li>Included a better user experience by including the following:
     <ul>
-      <li>Pull down to refresh Popular or Top-Rated Movie. If this calls fails, the cached movies will continue to be displayed</li>
-      <li>Error handling to be able to better idenitify the issue</li>
+      <li>Pull down to refresh Popular and Top-Rated Movie. If this calls fails, the cached movies will continue to be displayed</li>
+      <li>Error handling to be able to better idenitify any issues</li>
       <li>Ensuring there are Movie Trailers before displaying the Share or Watch Trailer buttons</li>
-      <li>Offline access to your list of Favorite Movies and their details.</li>
+      <li>Offline access to your list of Favorite Movies and their details</li>
     </ul>
-  <li>Finally, creating a database and content provider to store the Movie Details for the Favorite Movie.</li> 
+  </li>
+  <li>Finally, a  database was created along with a content provider to store the Movie Details for a favorite Movie.</li> 
 </ul>
 </p>
 <p><b>How to run the Popular Movies app</b></p>
-<p>The Popular Movies app connects to theMovieDB server which displays movie information. To be able to run this app, you will 
+<p>The Popular Movies app connects to theMovieDB server, which displays movie information. To be able to run this app, you will 
 need to sign up for a free theMoviesDB api key at https://www.themoviedb.org/documentation/api. Once you have recieved this key, you will 
 need to copy and paste your key into the gradle.properties and replace "Insert API Key here" with your key.</p>
 <ul>
@@ -63,14 +63,15 @@ need to copy and paste your key into the gradle.properties and replace "Insert A
 <p><b>What I learned after Part 2?</b></p>
 <ul>
   <li>How to fetch and display User Reviews and Movie Trailer from the Internet</li>
-  <li>How to create an SQLite database and Content Provider</li>
-  <li>How to use Data Binding to bind UI components to an Activity, to help remove boilerplate code</li>
+  <li>How to create an SQLite Database and Content Provider</li>
+  <li>How to use Data Binding</li>
   <li>How to set up and run a small set of Unit Tests</li>
-  <li>How to achieve a good user experience by including:</li>
+  <li>How to achieve a good user experience by including:
     <ul>
       <li>Pull to refresh Movies</li>
       <li>Caching Movies from the Server</li>
       <li>Allowing the user to access their Favorite Movies offline</li>
       <li>Error handling to help inform the user of any issues</li>
     </ul>
+  </li>
 </ul>
