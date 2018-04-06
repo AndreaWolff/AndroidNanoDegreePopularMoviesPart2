@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.andrea.popularmoviespart2.R;
@@ -37,6 +38,7 @@ public class DetailsPresenter {
 
     private DetailsContract.View view;
     private Movie movie;
+    private List<MovieTrailer> movieTrailers;
     private MovieTrailer movieTrailer;
     private List<MovieReview> movieReviews;
 
@@ -52,10 +54,9 @@ public class DetailsPresenter {
         this.contentResolver = contentResolver;
     }
 
-    public void connectView(@NonNull DetailsContract.View view, @NonNull Intent intent) {
+    public void connectView(@NonNull DetailsContract.View view, @Nullable Bundle extras) {
         this.view = view;
 
-        Bundle extras = intent.getExtras();
         if (extras == null) {
             view.finishActivity();
             return;
@@ -98,7 +99,7 @@ public class DetailsPresenter {
             configureMovieReviews(movieReviews);
         }
 
-        if (movieTrailer == null) {
+        if (movieTrailers == null) {
             loadMovieTrailers();
         }
     }
@@ -125,7 +126,7 @@ public class DetailsPresenter {
     }
 
     public void watchTrailerSelected() {
-        if (movieTrailer == null) {
+        if (movieTrailers == null) {
             return;
         }
 
@@ -202,10 +203,12 @@ public class DetailsPresenter {
 
             view.showMovieTrailerButtons();
         }
-        movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+        this.movieTrailers = movieTrailers;
     }
 
     private void configureMovieTrailer() {
+        movieTrailer = movieTrailers.get(new Random().nextInt(movieTrailers.size()));
+
         // Taken from https://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
         Intent appIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerAppUrl());
         Intent webIntent = new Intent(Intent.ACTION_VIEW, movieTrailer.getYouTubeTrailerWebUrl());
@@ -269,7 +272,7 @@ public class DetailsPresenter {
             if (isFavorite) {
                 view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.colorAccent));
             } else {
-                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.white));
+                view.setFavoriteButton(DrawableUtil.getTintedDrawable(context, R.drawable.icon_favorite, R.color.divider));
             }
         }
     }

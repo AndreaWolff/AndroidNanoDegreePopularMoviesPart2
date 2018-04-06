@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies - Part 2</string>
+    <string name="app_name">Popular Movies</string>
 
     <!-- Main Activity -->
     <string name="main_popular_movies_title">Popular Movies</string>

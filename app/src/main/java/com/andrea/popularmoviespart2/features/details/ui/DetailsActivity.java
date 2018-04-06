@@ -63,7 +63,7 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
                 .build()
                 .inject(this);
 
-        presenter.connectView(this, getIntent());
+        presenter.connectView(this, getIntent().getExtras());
 
         binding.detailsUserReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.detailsUserReviewRecyclerView.setHasFixedSize(true);
