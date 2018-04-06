@@ -15,7 +15,7 @@
         android:background="@color/colorAccent"/>
 
     <TextView
-        android:id="@+id/textview_movie_review_author"
+        android:id="@+id/detailsUserReviewAuthor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="italic|bold"
@@ -23,7 +23,7 @@
         />
 
     <TextView
-        android:id="@+id/textview_movie_review"
+        android:id="@+id/detailsUserReview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/standard_padding_half"

@@ -65,9 +65,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
         presenter.connectView(this, getIntent());
 
-        binding.detailsMovieReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.detailsMovieReviewsRecyclerView.setHasFixedSize(true);
-        binding.detailsMovieReviewsRecyclerView.setNestedScrollingEnabled(false);
+        binding.detailsUserReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.detailsUserReviewRecyclerView.setHasFixedSize(true);
+        binding.detailsUserReviewRecyclerView.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -166,24 +166,24 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
     @Override
     public void showProgressBar() {
-        binding.loadingProgressBar.setVisibility(VISIBLE);
-        binding.divider.setVisibility(GONE);
+        binding.detailsUserReviewLoadingProgressBar.setVisibility(VISIBLE);
+        binding.detailsUserReviewDivider.setVisibility(GONE);
         binding.detailsUserReviewLabel.setVisibility(GONE);
-        binding.detailsMovieReviewsRecyclerView.setVisibility(GONE);
+        binding.detailsUserReviewRecyclerView.setVisibility(GONE);
     }
 
     @Override
     public void hideProgressBar() {
-        binding.loadingProgressBar.setVisibility(GONE);
-        binding.divider.setVisibility(VISIBLE);
+        binding.detailsUserReviewLoadingProgressBar.setVisibility(GONE);
+        binding.detailsUserReviewDivider.setVisibility(VISIBLE);
         binding.detailsUserReviewLabel.setVisibility(VISIBLE);
-        binding.detailsMovieReviewsRecyclerView.setVisibility(VISIBLE);
+        binding.detailsUserReviewRecyclerView.setVisibility(VISIBLE);
     }
 
     @Override
     public void showMovieReviews(@NonNull List<MovieReview> movieReviews) {
         DetailsAdapter adapter = new DetailsAdapter(movieReviews);
-        binding.detailsMovieReviewsRecyclerView.setAdapter(adapter);
+        binding.detailsUserReviewRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -218,27 +218,27 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
 
     @Override
     public void showMovieTrailerButtons() {
-        binding.movieTrailerContent.setVisibility(VISIBLE);
+        binding.detailsMovieTrailerContent.setVisibility(VISIBLE);
         shareVisibility = true;
         invalidateOptionsMenu();
     }
 
     @Override
     public void hideMovieTrailerButtons() {
-        binding.movieTrailerContent.setVisibility(GONE);
+        binding.detailsMovieTrailerContent.setVisibility(GONE);
         shareVisibility = false;
         invalidateOptionsMenu();
     }
 
     @Override
     public void showContentProgressBar() {
-        binding.contentLoadingProgressBar.setVisibility(VISIBLE);
+        binding.detailsLoadingProgressBar.setVisibility(VISIBLE);
         binding.contentConstraintLayout.setVisibility(GONE);
     }
 
     @Override
     public void hideContentProgressBar() {
-        binding.contentLoadingProgressBar.setVisibility(GONE);
+        binding.detailsLoadingProgressBar.setVisibility(GONE);
         binding.contentConstraintLayout.setVisibility(VISIBLE);
     }
     // endregion

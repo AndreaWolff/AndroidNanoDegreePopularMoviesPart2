@@ -189,7 +189,7 @@
                     />
 
                 <android.support.constraint.ConstraintLayout
-                    android:id="@+id/movieTrailerContent"
+                    android:id="@+id/detailsMovieTrailerContent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/standard_padding_half"
@@ -218,7 +218,7 @@
                     >
 
                     <ProgressBar
-                        android:id="@+id/loadingProgressBar"
+                        android:id="@+id/detailsUserReviewLoadingProgressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|center_horizontal"
@@ -231,7 +231,7 @@
                         />
 
                     <View
-                        android:id="@+id/divider"
+                        android:id="@+id/detailsUserReviewDivider"
                         android:layout_width="@dimen/match_constraint"
                         android:layout_height="@dimen/divider_height"
                         android:background="@color/colorAccent"
@@ -249,12 +249,12 @@
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="@id/innerLayout"
-                        app:layout_constraintTop_toBottomOf="@id/divider"
+                        app:layout_constraintTop_toBottomOf="@id/detailsUserReviewDivider"
                         tools:text="User Review"
                         />
 
                     <android.support.v7.widget.RecyclerView
-                        android:id="@+id/detailsMovieReviewsRecyclerView"
+                        android:id="@+id/detailsUserReviewRecyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/standard_padding_quarter"
@@ -271,7 +271,7 @@
         </android.support.v4.widget.NestedScrollView>
 
         <ProgressBar
-            android:id="@+id/contentLoadingProgressBar"
+            android:id="@+id/detailsLoadingProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"

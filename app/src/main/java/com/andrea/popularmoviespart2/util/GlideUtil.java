@@ -1,6 +1,5 @@
 package com.andrea.popularmoviespart2.util;
 
-
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
@@ -13,5 +12,4 @@ public class GlideUtil {
                 .load(photo)
                 .into(imageView);
     }
-
 }

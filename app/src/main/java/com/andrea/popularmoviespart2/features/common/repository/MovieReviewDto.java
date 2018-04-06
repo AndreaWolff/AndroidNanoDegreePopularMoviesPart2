@@ -14,8 +14,8 @@ class MovieReviewDto {
 
     @Nullable MovieReview toMovieReview() {
         return new MovieReview(author,
-                content,
-                id,
-                url);
+                               content,
+                               id,
+                               url);
     }
 }

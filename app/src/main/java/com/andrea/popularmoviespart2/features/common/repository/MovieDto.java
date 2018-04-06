@@ -17,12 +17,12 @@ class MovieDto {
 
     @NonNull Movie toMovie() {
         return new Movie(id,
-                title,
-                releaseDate,
-                voteAverage,
-                plotSynopsis,
-                posterPath,
-                backdropPhotoPath,
-                false);
+                         title,
+                         releaseDate,
+                         voteAverage,
+                         plotSynopsis,
+                         posterPath,
+                         backdropPhotoPath,
+                         false);
     }
 }

@@ -57,7 +57,7 @@ public class FavoriteMoviesAdapter extends RecyclerView.Adapter<FavoriteMoviesAd
         FavoriteMoviesViewHolder(View itemView) {
             super(itemView);
 
-            this.moviePosterImageView = itemView.findViewById(R.id.imageview_movie_poster_list_item);
+            this.moviePosterImageView = itemView.findViewById(R.id.moviePosterImage);
             itemView.setOnClickListener(this);
         }
 

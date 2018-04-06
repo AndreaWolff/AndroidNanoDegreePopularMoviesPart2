@@ -1,5 +1,6 @@
 package com.andrea.popularmoviespart2.features.details.ui;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,7 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MovieRev
 
     private List<MovieReview> movieReviews;
 
-    DetailsAdapter(List<MovieReview> movieReviews) {
+    DetailsAdapter(@NonNull List<MovieReview> movieReviews) {
         this.movieReviews = movieReviews;
     }
 
@@ -42,8 +43,8 @@ public class DetailsAdapter extends RecyclerView.Adapter<DetailsAdapter.MovieRev
 
         MovieReviewsViewHolder(View itemView) {
             super(itemView);
-            authorTextView = itemView.findViewById(R.id.textview_movie_review_author);
-            reviewContentTextView = itemView.findViewById(R.id.textview_movie_review);
+            authorTextView = itemView.findViewById(R.id.detailsUserReviewAuthor);
+            reviewContentTextView = itemView.findViewById(R.id.detailsUserReview);
         }
 
         void bind(int listItem) {

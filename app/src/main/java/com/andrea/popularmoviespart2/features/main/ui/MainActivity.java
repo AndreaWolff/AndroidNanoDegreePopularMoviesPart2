@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         presenter.connectView(this, savedInstanceState);
 
         // Taken from https://guides.codepath.com/android/implementing-pull-to-refresh-guide#step-2-setup-swiperefreshlayout
-        binding.swipeToRefreshContainer.setOnRefreshListener(() -> presenter.swipeToRefresh());
-        binding.swipeToRefreshContainer.setColorSchemeResources(R.color.colorAccent);
+        binding.movieSwipeToRefreshContainer.setOnRefreshListener(() -> presenter.swipeToRefresh());
+        binding.movieSwipeToRefreshContainer.setColorSchemeResources(R.color.colorAccent);
 
         binding.moviePostersRecyclerView.setLayoutManager(new GridLayoutManager(this, this.getResources().getInteger(R.integer.grid_span_count)));
         binding.moviePostersRecyclerView.setHasFixedSize(true);
@@ -149,17 +149,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override public void showProgressBar() {
         binding.moviePostersRecyclerView.setVisibility(GONE);
-        binding.loadingProgressBar.setVisibility(VISIBLE);
+        binding.movieLoadingProgressBar.setVisibility(VISIBLE);
     }
 
     @Override public void hideProgressBar() {
         binding.moviePostersRecyclerView.setVisibility(VISIBLE);
-        binding.loadingProgressBar.setVisibility(GONE);
+        binding.movieLoadingProgressBar.setVisibility(GONE);
     }
 
     @Override public void hideProgressBarOnMovieListError() {
         binding.moviePostersRecyclerView.setVisibility(GONE);
-        binding.loadingProgressBar.setVisibility(GONE);
+        binding.movieLoadingProgressBar.setVisibility(GONE);
     }
 
     @Override public void navigateToMovieDetails(@NonNull Intent intent) {
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void hideSwipeToRefresh() {
-        binding.swipeToRefreshContainer.setRefreshing(false);
+        binding.movieSwipeToRefreshContainer.setRefreshing(false);
     }
     // endregion
 }

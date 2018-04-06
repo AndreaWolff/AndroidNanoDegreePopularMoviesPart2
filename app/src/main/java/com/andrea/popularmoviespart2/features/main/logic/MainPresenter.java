@@ -151,7 +151,6 @@ public class MainPresenter {
                 view.showError("", context.getString(R.string.error_no_favorite_movies));
                 view.hideProgressBarOnMovieListError();
             }
-
         }
     }
 
@@ -184,6 +183,13 @@ public class MainPresenter {
             disposable.add(movieRepository.getRefreshedTopRatedMovies()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::handleRefreshedMoviesResponseSuccessful, this::handleRefreshMoviesResponseError));
+            return;
+        }
+
+        if (isFavoriteMovies) {
+            if (view != null) {
+                view.hideSwipeToRefresh();
+            }
         }
     }
 

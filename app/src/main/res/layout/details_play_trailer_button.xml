@@ -13,7 +13,7 @@
     >
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/detailsPlayButtonImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/play_trailer_button_description"
@@ -26,7 +26,7 @@
         />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/detailsPlayTrailerLabel"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/standard_padding_half"
@@ -39,7 +39,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/detailsPlayButtonImage"
         app:layout_constraintTop_toTopOf="parent"
         />
 
