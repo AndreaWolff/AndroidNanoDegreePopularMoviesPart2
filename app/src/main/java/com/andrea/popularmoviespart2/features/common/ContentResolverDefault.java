@@ -1,8 +1,8 @@
 package com.andrea.popularmoviespart2.features.common;
 
+import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.andrea.popularmoviespart2.data.MovieContract;
@@ -31,25 +31,14 @@ public class ContentResolverDefault implements ContentResolver {
     }
 
     @Override
-    public boolean getFavoriteMovie(@NonNull String movieId) {
-        Cursor query = context.getContentResolver().query(CONTENT_URI,
-                                                          null,
-                                                          COLUMN_MOVIE_ID + " = ? AND " + COLUMN_MOVIE_FAVORITE + " = ?",
-                                                          new String[]{movieId, "1"},
-                                                          null,
-                                                          null);
-
-        if (query != null) {
-            if (query.getCount() <= 0) {
-                query.close();
-                return false;
-            }
-
-            query.close();
-            return true;
-        }
-
-        return false;
+    public void getFavoriteMovie(@NonNull AsyncQueryHandler queryHandler, @NonNull String movieId) {
+        queryHandler.startQuery(1,
+                                null,
+                                CONTENT_URI,
+                                null,
+                                COLUMN_MOVIE_ID + " = ? AND " + COLUMN_MOVIE_FAVORITE + " = ?",
+                                new String[]{movieId, "1"},
+                                null);
     }
 
     @Override
@@ -72,8 +61,8 @@ public class ContentResolverDefault implements ContentResolver {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_MOVIE_FAVORITE, 0);
         context.getContentResolver().update(buildMovieId(movie.getId()),
-                                            contentValues,
-                                            MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
-                                             new String[]{String.valueOf(movie.getId())});
+                contentValues,
+                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
+                new String[]{String.valueOf(movie.getId())});
     }
 }

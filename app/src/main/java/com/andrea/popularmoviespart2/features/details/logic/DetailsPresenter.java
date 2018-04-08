@@ -1,7 +1,10 @@
 package com.andrea.popularmoviespart2.features.details.logic;
 
+import android.annotation.SuppressLint;
+import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -75,17 +78,41 @@ public class DetailsPresenter {
         isFavorite = movie.isFavorite();
 
         if (!isFavorite) {
-            isFavorite = contentResolver.getFavoriteMovie(movie.getId());
+            // Ensure the query method is off the main thread for a more responsive app.
+            @SuppressLint("HandlerLeak")
+            AsyncQueryHandler queryHandler = new AsyncQueryHandler(context.getContentResolver()) {
+                @Override
+                protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+                    if (cursor == null) {
+                        isFavorite = false;
+                        refreshUI();
+                        return;
+                    }
+
+                    if (cursor.getCount() <= 0) {
+                        cursor.close();
+                        isFavorite = false;
+                        refreshUI();
+                        return;
+                    }
+
+                    cursor.close();
+                    isFavorite = true;
+                    refreshUI();
+                }
+            };
+
+            contentResolver.getFavoriteMovie(queryHandler, movie.getId());
         }
 
         refreshUI();
 
         populateDetails(movie.getTitle(),
-                        movie.getReleaseDate(),
-                        movie.getVoteAverage(),
-                        movie.getPlotSynopsis(),
-                        movie.getPosterPath(),
-                        movie.getBackdropPhotoPath());
+                movie.getReleaseDate(),
+                movie.getVoteAverage(),
+                movie.getPlotSynopsis(),
+                movie.getPosterPath(),
+                movie.getBackdropPhotoPath());
     }
 
     public void disconnectView() {

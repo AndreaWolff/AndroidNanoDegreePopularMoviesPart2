@@ -43,7 +43,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        // Alter the table rather than Dropping the table, so ensure that data is not lost.
+        sqLiteDatabase.execSQL("ALTER TABLE " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

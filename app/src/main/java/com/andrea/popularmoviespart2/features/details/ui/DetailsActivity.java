@@ -98,6 +98,8 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                // To ensure that selecting back returns you to the last Movie list you were looking at I have decided to finish this current activity.
+                // Instead of doing this, look at returning an ActivityResultCode to match up wit the Movie list that was last displayed.
                 finish();
                 return true;
             case R.id.action_share:
@@ -201,7 +203,9 @@ public class DetailsActivity extends AppCompatActivity implements DetailsContrac
         try {
             startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {
-            startActivity(webIntent);
+            if (webIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(webIntent);
+            }
         }
     }
 
