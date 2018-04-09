@@ -1,13 +1,14 @@
 package com.andrea.popularmoviespart2.features.common;
 
-import android.content.AsyncQueryHandler;
 import android.support.annotation.NonNull;
 
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 
+import io.reactivex.Single;
+
 public interface ContentResolver {
 
-    void getFavoriteMovie(@NonNull AsyncQueryHandler queryHandler, @NonNull String movieId);
+    Single<Boolean> getFavoriteMovie(@NonNull String movieId);
 
     void insertFavoriteMovie(@NonNull Movie movie);
 

@@ -1,14 +1,16 @@
 package com.andrea.popularmoviespart2.features.common;
 
-import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.andrea.popularmoviespart2.data.MovieContract;
 import com.andrea.popularmoviespart2.features.common.domain.Movie;
 
 import javax.inject.Inject;
+
+import io.reactivex.Single;
 
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_BACKDROP_PHOTO_PATH;
 import static com.andrea.popularmoviespart2.data.MovieContract.MovieEntry.COLUMN_MOVIE_FAVORITE;
@@ -31,14 +33,25 @@ public class ContentResolverDefault implements ContentResolver {
     }
 
     @Override
-    public void getFavoriteMovie(@NonNull AsyncQueryHandler queryHandler, @NonNull String movieId) {
-        queryHandler.startQuery(1,
-                                null,
-                                CONTENT_URI,
-                                null,
-                                COLUMN_MOVIE_ID + " = ? AND " + COLUMN_MOVIE_FAVORITE + " = ?",
-                                new String[]{movieId, "1"},
-                                null);
+    public Single<Boolean> getFavoriteMovie(@NonNull String movieId) {
+        Cursor query = context.getContentResolver().query(CONTENT_URI,
+                                                          null,
+                                                          COLUMN_MOVIE_ID + " = ? AND " + COLUMN_MOVIE_FAVORITE + " = ?",
+                                                          new String[]{movieId, "1"},
+                                                          null,
+                                                          null);
+
+        if (query != null) {
+            if (query.getCount() <= 0) {
+                query.close();
+                return Single.just(false);
+            }
+
+            query.close();
+            return Single.just(true);
+        }
+
+        return Single.just(false);
     }
 
     @Override

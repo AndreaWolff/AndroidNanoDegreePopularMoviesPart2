@@ -1,10 +1,7 @@
 package com.andrea.popularmoviespart2.features.details.logic;
 
-import android.annotation.SuppressLint;
-import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -78,31 +75,9 @@ public class DetailsPresenter {
         isFavorite = movie.isFavorite();
 
         if (!isFavorite) {
-            // Ensure the query method is off the main thread for a more responsive app.
-            @SuppressLint("HandlerLeak")
-            AsyncQueryHandler queryHandler = new AsyncQueryHandler(context.getContentResolver()) {
-                @Override
-                protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-                    if (cursor == null) {
-                        isFavorite = false;
-                        refreshUI();
-                        return;
-                    }
-
-                    if (cursor.getCount() <= 0) {
-                        cursor.close();
-                        isFavorite = false;
-                        refreshUI();
-                        return;
-                    }
-
-                    cursor.close();
-                    isFavorite = true;
-                    refreshUI();
-                }
-            };
-
-            contentResolver.getFavoriteMovie(queryHandler, movie.getId());
+            disposable.add(contentResolver.getFavoriteMovie(movie.getId())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleGetFavoriteResponseSuccessful, this::handleResponseError));
         }
 
         refreshUI();
@@ -113,6 +88,11 @@ public class DetailsPresenter {
                 movie.getPlotSynopsis(),
                 movie.getPosterPath(),
                 movie.getBackdropPhotoPath());
+    }
+
+    private void handleGetFavoriteResponseSuccessful(Boolean isFavorite) {
+        this.isFavorite = isFavorite;
+        refreshUI();
     }
 
     public void disconnectView() {
@@ -250,6 +230,7 @@ public class DetailsPresenter {
 
     private void handleResponseError(Throwable error) {
         requestInProgress = false;
+        isFavorite = false;
 
         refreshUI();
         configureErrorMessage(error);
